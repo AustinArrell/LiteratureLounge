@@ -1,6 +1,8 @@
 # LiteratureLounge
 
-Personal book catalog for keeping track of book collections. Created by me for my beautiful wife.
+Personal book catalog for keeping track of book collections. Created by me for my beautiful wife. 
+
+Once I am happy with the feature set for books I will be expanding the functionality to include other forms of physical media: CDs, DvDs, Video Games, Board Games, Records, Tapes, etc. 
 
 # Features
 
