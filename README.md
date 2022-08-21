@@ -4,12 +4,23 @@ Personal book catalog for keeping track of book collections. Created by me for m
 
 Once I am happy with the feature set for books I will be expanding the functionality to include other forms of physical media: CDs, DvDs, Video Games, Board Games, Records, Tapes, etc. 
 
+# Technologies
+
+* ASP NET Core MVC - https://docs.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-6.0
+* C#, Html, CSS, Javascript
+* JQuery - https://jquery.com/
+* Toastr - https://github.com/CodeSeven/toastr
+* TableSorter - https://mottie.github.io/tablesorter/docs/
+* Icons from Bootstrap - https://icons.getbootstrap.com/
+* Vapor Theme from Bootswatch - https://bootswatch.com/vapor/
+
 # Features
 
 * Automatic book creation and cover art download from ISBN
 * Manual Book Creation
 * Manual Cover Art Upload
 * Table Sorting by Clicking Headers
+* Toastr Alerts
 
 ### Detailed Book View
 
