@@ -23,3 +23,6 @@ Once I am happy with the feature set for books I will be expanding the functiona
 
 ![image](https://user-images.githubusercontent.com/12488613/185807352-95f0b20c-8dd1-4f84-a5c9-3840f9d51442.png)
 
+### Manual Book Creation
+
+![image](https://user-images.githubusercontent.com/12488613/185807573-51b9e9eb-a6d6-4b58-962c-f6527a05bed3.png)
