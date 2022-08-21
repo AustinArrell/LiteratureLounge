@@ -1,0 +1,61 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.teacup {
+    position: relative;
+    display: inline-block;
+}
+
+.img-fill {
+    display: none;
+    position: absolute;
+    z-index: 99;
+}
+
+.teacup:hover .img-fill{
+    display: inline;
+}
+
+.imageEditIcon {
+    display: none;
+    margin-left: 10px;
+    position: absolute;
+}
+
+.imageEditIconBG {
+    display: none;
+    margin-left: 10px;
+    position: absolute;
+    color: black;
+}
+
+.coverImage:hover .imageEditIconBG {
+    display: inline;
+}
+
+.coverImage:hover .imageEditIcon{
+    display: inline;
+}
+
+.search-table-outter {
+    width:100%;
+    overflow-x: scroll;
+}
+
+

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Book>
+@{
+    ViewData["Title"] = "Books";
+}
+
+@section Scripts {
+  <script type="text/javascript" src="~/js/tablesorter.js"></script>
+  <script>
+    $(function() {
+        $("#bookTable").tablesorter();
+    });
+  </script>
+}
+    <div id="test" style="width: 50%; float:left">
+       <h1 class="text-primary">@ViewData["Title"]</h1>
+    </div>
+    <div class="bookAdd" style="width:50%; float:right; display:flex; justify-content:flex-end;">
+        <div class="btn-group" role="group">
+          <a asp-action="CreateFromISBN" type="button" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create Book</a>
+          <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+              <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
+            </div>
+          </div>
+        </div>
+    </div>
+<div class="search-table-outter">
+    <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%">
+        <thead>
+            <tr class="table-secondary">
+                <th>
+                    Title
+                </th>
+                <th>
+                    Author
+                </th>
+                <th>
+                    How's The Tea?
+                </th>
+                <th>
+                    ISBN
+                </th>
+                <th>
+                    Read Status
+                </th>
+                <th>
+                    Media Type
+                </th>
+                <th>
+                    Modify
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="DetailedView" asp-route-id="@obj.Id">@obj.Title</a>
+                    </td>
+                    <td>
+                        @obj.Author
+                    </td>
+                    <td>
+                        @obj.Rating
+                    </td>
+                    <td>
+                        @obj.ISBN
+                    </td>
+                    <td>
+                        @obj.ReadStatus
+                    </td>
+                    <td>
+                        @obj.MediaType
+                    </td>
+                    <td style="display:flex; justify-content:center;">
+                        <a asp-controller="Book" asp-action="Edit" asp-route-id="@obj.Id"
+                        class="btn btn-primary" style="margin-bottom: 10px"><i class="bi bi-pen"></i></a>
+                        <a asp-controller="Book" asp-action="Delete" asp-route-id="@obj.Id"
+                        class="btn btn-danger" style="margin-bottom: 10px"><i class="bi bi-trash3"></i></a>
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+</div>

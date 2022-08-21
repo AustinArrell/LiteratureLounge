@@ -1,0 +1,33 @@
+﻿@model BookDetailedViewModel
+
+@{
+    ViewData["Title"] = @Model.book.Title;
+    var ISBN = @Model.book.ISBN;
+}
+
+<h1>@Model.book.Title</h1>
+
+<div>
+    <div>
+        <h4 style="Display:inline">@Model.book.Author - </h4>
+        <p style="Display:inline">@(ISBN)</p>
+    </div>
+    <hr />
+    <div class="coverImage" style="width:auto; height:100%;">
+        <img style="max-width:50%; max-height:50%;" src="@Model.book.CoverLink" />
+        <div style="width:30% float:right">
+            <form asp-action="Upload" asp-route-isbn="@Model.book.ISBN" asp-route-id="@Model.book.Id" enctype="multipart/form-data" >   
+                <input asp-for="file" accept="image/*"/>
+                <div>
+                    <input type="submit" class="btn btn-success" value="Upload"/>
+                </div>
+            </form>
+        <div>
+            <a asp-action="DetailedView" asp-route-id="@Model.book.Id" class="btn btn-primary">Back to Book</a>
+        </div>
+    </div>
+    </div>
+    
+</div>
+
+

@@ -1,0 +1,99 @@
+﻿@model BookDetailedViewModel
+
+@{
+    ViewData["Title"] = @Model.book.Title;
+    var ISBN = @Model.book.ISBN;
+}
+
+<h1>@Model.book.Title</h1>
+
+<div>
+    <div>
+        <h4 style="Display:inline">@Model.book.Author - </h4>
+        <p style="Display:inline">@(ISBN)</p>
+    </div>
+    <hr />
+    <div class="coverImage" style="float:left; width:20%; height:auto;">
+        <a asp-action="EditCoverImage" asp-route-id="@Model.book.Id">
+            <i class="imageEditIconBG bi bi-square-fill"></i>
+            <i class="imageEditIcon bi bi-pencil"></i>
+        </a>
+        
+        <img style="max-width:100%; max-height:100%;" src="@Model.book.CoverLink" />
+        <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model?.book.Id">Edit</a>
+        <a asp-action="Index" class="btn btn-primary">Back to Book List</a>
+    </div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            How's The Tea?
+        </dt>
+        <dd class = "col-sm-10">
+            @for(int i =0; i < 5; i++)
+            {
+                if (i < Model.book.Rating)
+                {
+                    <a asp-action="Rating" asp-route-rating=@(i+1) asp-route-id=@Model.book.Id><i class="bi bi-cup-hot-fill"></i></a>
+                }else{
+                    <div class="teacup">
+                        <a asp-action="Rating" asp-route-rating=@(i+1) asp-route-id=@Model.book.Id><i class="img-fill bi bi-cup-hot-fill"></i></a>
+                        <i class="img-blank bi bi-cup-hot"></i>
+                    </div>
+                    
+                }
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.book.Notes)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.Notes)
+        </dd>
+        <hr />
+        <dt class = "col-sm-2">
+            Chapter Length
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.ChapterLength)
+        </dd>
+        <dt class = "col-sm-2">
+            Read Status
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.ReadStatus)
+        </dd>
+        <dt class = "col-sm-2">
+            Media Type
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.MediaType)
+        </dd>
+        <hr />
+        <dt class = "col-sm-2">
+            Stamped?
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.isStamped)
+        </dd>
+        <dt class = "col-sm-2">
+            Annotated?
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.isAnnotated)
+        </dd>
+        <dt class = "col-sm-2">
+            Checked Out?
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.isCheckedOut)
+        </dd>
+        <dt class = "col-sm-2">
+            Signed?
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.book.isSigned)
+        </dd>
+    </dl>
+</div>
+<div>
+    
+</div>

@@ -1,0 +1,68 @@
+﻿@model Book
+@{
+    ViewData["Title"] = "Delete Book";
+}
+<div style=" display:flex; justify-content:center;">
+    <form method="post" style="width: 50%">
+      <fieldset class="border p-3 mt-2">
+        <h1 class="text-primary">Create Book</h1>
+        <div>
+          <label asp-for="Title"></label>
+          <input asp-for="Title" disabled="" type="text" class="form-control">
+
+          <label asp-for="Author"></label>
+          <textarea asp-for="Author" disabled="" class="form-control" rows="1"></textarea>
+          
+          <label asp-for="ISBN"></label>
+          <textarea asp-for="ISBN" disabled="" class="form-control" rows="1"></textarea>
+
+          <label asp-for="Rating"></label>
+          <textarea asp-for="Rating" disabled="" class="form-control" rows="1"></textarea>
+
+          <label asp-for="Notes"></label>
+          <textarea asp-for="Notes" disabled="" class="form-control" rows="1"></textarea>
+
+          <label asp-for="ChapterLength"></label>
+          <select asp-for="ChapterLength" disabled="" class="form-select">
+            <option>Unknown/Other</option>
+            <option>Short</option>
+            <option>Medium</option>
+            <option>Long</option>
+          </select>
+
+          <label asp-for="ReadStatus"></label>
+          <select asp-for="ReadStatus" disabled="" class="form-select">
+              <option>Unread</option>
+              <option>Read</option>
+          </select>
+
+          <label asp-for="MediaType"></label>
+          <select asp-for="MediaType" disabled="" class="form-select">
+            <option>Hardcover</option>
+            <option>Paperback</option>
+            <option>Kindle</option>
+          </select>
+
+          <label for="isAnnotated">Annotated?</label>
+          <input id="isAnnotated" asp-for="isAnnotated" disabled=""  class="form-check-input" type="checkbox" rows="1">
+         
+          <label for="isCheckedOut">Checked Out?</label>
+          <input id="isCheckedOut" asp-for="isCheckedOut" disabled="" class="form-check-input" type="checkbox" rows="1">
+          
+          <label for="isSigned">Signed?</label>
+          <input id="isSigned" asp-for="isSigned" disabled="" class="form-check-input" type="checkbox" rows="1">
+          
+          <label for="isStamped">Stamped?</label>
+          <input id="isStamped" asp-for="isStamped" disabled="" class="form-check-input" type="checkbox" rows="1">
+          
+
+        </div>
+        </fieldset>
+        <fieldset >
+        <button asp-controller="Book" asp-action="Delete" type="submit" 
+        class="btn btn-danger mt-2"><i class="bi bi-trash3"></i>Delete Book</button>
+        <a class="btn btn-primary mt-2" asp-controller="Book" asp-action="Index">
+            <i class="bi bi-x-circle"></i> Cancel</a>
+      </fieldset>
+    </form>
+</div>
