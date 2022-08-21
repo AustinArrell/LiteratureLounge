@@ -13,6 +13,8 @@ Once I am happy with the feature set for books I will be expanding the functiona
 * TableSorter - https://mottie.github.io/tablesorter/docs/
 * Icons from Bootstrap - https://icons.getbootstrap.com/
 * Vapor Theme from Bootswatch - https://bootswatch.com/vapor/
+* Google Books for ISBN Book Creation - https://books.google.com/
+* Open Library for Automatic Cover Download - https://openlibrary.org/dev/docs/api/covers
 
 # Features
 
