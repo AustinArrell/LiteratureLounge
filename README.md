@@ -4,6 +4,8 @@ Personal book catalog for keeping track of book collections. Created by me for m
 
 Once I am happy with the feature set for books I will be expanding the functionality to include other forms of physical media: CDs, DvDs, Video Games, Board Games, Records, Tapes, etc. 
 
+Requires a SQL database. I have used a local MariaDB server for all of my testing so far.
+
 # Technologies
 
 * ASP NET Core MVC - https://docs.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-6.0
