@@ -41,6 +41,20 @@ namespace LiteratureLounge.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (book.Rating > 5)
+                    book.Rating = 5;
+                if (book.Rating < 0)
+                    book.Rating = 0;
+                var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
+                foreach (var _isbn in ISBNs) 
+                {
+                    if (_isbn == book.ISBN) 
+                    {
+                        TempData["Error"] = $"Book has duplicate ISBN!";
+                        return RedirectToAction("Create");
+                    }
+                }
+
                 _db.Books.Add(book);
                 _db.SaveChanges();
                 TempData["Success"] = $"Added book successfully!";
@@ -69,16 +83,28 @@ namespace LiteratureLounge.Controllers
             if (!System.IO.File.Exists($"wwwroot/Images/Covers/{viewModel.ISBN}.jpg"))
             {
                 WebClient webClient = new WebClient();
-                webClient.DownloadFile(@$"https://covers.openlibrary.org/b/isbn/{viewModel.ISBN}.jpg", $"wwwroot/Images/Covers/{viewModel.ISBN}.jpg");
+
+                webClient.DownloadFile(@$"https://pictures.abebooks.com/isbn/{viewModel.ISBN}.jpg", $"wwwroot/Images/Covers/{viewModel.ISBN}.jpg");
                 webClient.Dispose();
             }
 
             try
             {
                 book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
+                var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
+                foreach (var _isbn in ISBNs)
+                {
+                    if (_isbn == book.ISBN)
+                    {
+                        TempData["Error"] = $"Book has duplicate ISBN!";
+                        return RedirectToAction("CreateFromISBN");
+                    }
+                }
+
                 _db.Books.Add(book);
                 _db.SaveChanges();
                 TempData["Success"] = $"Added book successfully!";
+                return RedirectToAction("Edit", new { book.Id });
             }
             catch (Exception e)
             {
@@ -113,6 +139,11 @@ namespace LiteratureLounge.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (book.Rating > 5)
+                    book.Rating = 5;
+                if (book.Rating < 0)
+                    book.Rating = 0;
+
                 _db.Books.Update(book);
                 _db.SaveChanges();
                 TempData["Success"] = $"Edited Book: {book.Title} successfully!";

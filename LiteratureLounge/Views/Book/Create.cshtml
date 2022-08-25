@@ -26,26 +26,40 @@
           <label asp-for="ChapterLength"></label>
           <span asp-validation-for="ChapterLength" class="text-danger"></span>
           <select asp-for="ChapterLength" class="form-select">
+            <option>Medium</option>
             <option>Unknown/Other</option>
             <option>Short</option>
-            <option>Medium</option>
             <option>Long</option>
           </select>
 
           <label asp-for="ReadStatus"></label>
           <span asp-validation-for="ReadStatus" class="text-danger"></span>
           <select asp-for="ReadStatus" class="form-select">
-              <option>Unread</option>
               <option>Read</option>
+              <option>Re-Read</option>
+              <option>Unread</option>
           </select>
 
           <label asp-for="MediaType"></label>
           <span asp-validation-for="MediaType" class="text-danger"></span>
           <select asp-for="MediaType" class="form-select">
-            <option>Hardcover</option>
             <option>Paperback</option>
+            <option>Hardcover</option>
             <option>Kindle</option>
           </select>
+
+          <label asp-for="SignatureType"></label>
+          <span asp-validation-for="SignatureType" class="text-danger"></span>
+          <select asp-for="SignatureType" class="form-select">
+            <option>None</option>
+            <option>Sticker</option>
+            <option>Original</option>
+            <option>Signature Plate</option>
+          </select>
+
+          <label asp-for="CheckedOutTo">Checked Out To</label>
+          <span asp-validation-for="CheckedOutTo" class="text-danger"></span>
+          <input asp-for="CheckedOutTo" type="text" class="form-control">
 
           <label for="isAnnotated">Annotated?</label>
           <span asp-validation-for="isAnnotated" class="text-danger"></span>
@@ -59,9 +73,13 @@
           <span asp-validation-for="isSigned" class="text-danger"></span>
           <input id="isSigned" asp-for="isSigned" class="form-check-input" type="checkbox" rows="1">
           
-          <label for="isStamped">Stamped?</label>
+          <label for="isStamped">Embossed?</label>
           <span asp-validation-for="isStamped" class="text-danger"></span>
           <input id="isStamped" asp-for="isStamped" class="form-check-input" type="checkbox" rows="1">
+
+          <label for="isFavorite">Favorite?</label>
+          <span asp-validation-for="isFavorite" class="text-danger"></span>
+          <input id="isFavorite" asp-for="isFavorite" class="form-check-input" type="checkbox" rows="1">
           
 
         </div>

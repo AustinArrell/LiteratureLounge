@@ -12,15 +12,21 @@ namespace LiteratureLounge.Models
         public string? Author { get; set; }
         [Required]
         public string? ISBN { get; set; }
+
+        public ICollection<BookGenre> BookGenres { get; set; }
         public string? Notes { get; set; } = "";
-        public string? ChapterLength { get; set; } = "Unknown/Other";
+        public string? ChapterLength { get; set; } = "Medium";
         public bool isStamped { get; set; } = false;
         public bool isAnnotated { get; set; } = false;
         public bool isCheckedOut { get; set; } = false;
         public bool isSigned { get; set; } = false;
-        public string? ReadStatus { get; set; } = "Unread";
-        public string? MediaType { get; set; } = "Unknown";
+        public bool isFavorite { get; set; } = false;
+        public string? ReadStatus { get; set; } = "Read";
+        public string? MediaType { get; set; } = "Paperback";
         public string? CoverLink { get; set; } = "";
-        public int? Rating { get; set; } = 0;
+        public float? Rating { get; set; } = 0;
+
+        public string? CheckedOutTo { get; set; } = "";
+        public string? SignatureType { get; set; } = "";
     }
 }

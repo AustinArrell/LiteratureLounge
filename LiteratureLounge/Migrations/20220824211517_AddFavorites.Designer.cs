@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Purrs_And_Prose.Data;
 
@@ -10,9 +11,10 @@ using Purrs_And_Prose.Data;
 namespace LiteratureLounge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220824211517_AddFavorites")]
+    partial class AddFavorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +34,6 @@ namespace LiteratureLounge.Migrations
                     b.Property<string>("ChapterLength")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("CheckedOutTo")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("CoverLink")
                         .HasColumnType("longtext");
 
@@ -52,9 +51,6 @@ namespace LiteratureLounge.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("ReadStatus")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SignatureType")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Title")
@@ -79,65 +75,6 @@ namespace LiteratureLounge.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.BookGenre", b =>
-                {
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookId", "GenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("BookGenres");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.Genre", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Genres");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.BookGenre", b =>
-                {
-                    b.HasOne("LiteratureLounge.Models.Book", "Book")
-                        .WithMany("BookGenres")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LiteratureLounge.Models.Genre", "Genre")
-                        .WithMany("BookGenres")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Genre");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.Book", b =>
-                {
-                    b.Navigation("BookGenres");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.Genre", b =>
-                {
-                    b.Navigation("BookGenres");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,7 +17,7 @@
         <img style="max-width:50%; max-height:50%;" src="@Model.book.CoverLink" />
         <div style="width:30% float:right">
             <form asp-action="Upload" asp-route-isbn="@Model.book.ISBN" asp-route-id="@Model.book.Id" enctype="multipart/form-data" >   
-                <input asp-for="file" accept="image/*"/>
+                <input class="form-control" type="file" asp-for="file" accept="image/*"/>
                 <div>
                     <input type="submit" class="btn btn-success" value="Upload"/>
                 </div>

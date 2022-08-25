@@ -57,6 +57,10 @@
             {
                 <tr>
                     <td>
+                        @if (obj.isFavorite)
+                        {
+                            <i class="bi bi-suit-heart-fill"></i>
+                        }
                         <a asp-action="DetailedView" asp-route-id="@obj.Id">@obj.Title</a>
                     </td>
                     <td>
