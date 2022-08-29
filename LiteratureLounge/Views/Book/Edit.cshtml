@@ -1,4 +1,4 @@
-﻿@model Book
+﻿@model BookEditViewModel
 @{
     ViewData["Title"] = "Edit Book";
 }
@@ -7,97 +7,99 @@
       <fieldset class="border p-3 mt-2">
         <h1 class="text-primary">Edit Book</h1>
         <div>
-          <label asp-for="Title"></label>
-          <span asp-validation-for="Title" class="text-danger"></span>
-          <input asp-for="Title" type="text" class="form-control">
+          <label asp-for="book.Title"></label>
+          <span asp-validation-for="book.Title" class="text-danger"></span>
+          <input asp-for="book.Title" type="text" class="form-control">
 
-          <label asp-for="Author"></label>
-          <span asp-validation-for="Author" class="text-danger"></span>
-          <textarea asp-for="Author" class="form-control" rows="1"></textarea>
+          <label asp-for="book.Author"></label>
+          <span asp-validation-for="book.Author" class="text-danger"></span>
+          <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>
           
-          <label asp-for="ISBN"></label>
-          <span asp-validation-for="ISBN" class="text-danger"></span>
-          <textarea asp-for="ISBN" class="form-control" rows="1"></textarea>
+          <label asp-for="book.ISBN"></label>
+          <span asp-validation-for="book.ISBN" class="text-danger"></span>
+          <textarea asp-for="book.ISBN" class="form-control" rows="1"></textarea>
 
-          <label asp-for="Notes"></label>
-          <span asp-validation-for="Notes" class="text-danger"></span>
-          <textarea asp-for="Notes" class="form-control" rows="1"></textarea>
+          <label asp-for="book.Notes"></label>
+          <span asp-validation-for="book.Notes" class="text-danger"></span>
+          <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
 
-          <label asp-for="BookGenres">Genre</label>
-          <span asp-validation-for="BookGenres" class="text-danger"></span>
-          <input asp-for="BookGenres" type="text" class="form-control">
+          <label asp-for="genre">Genre</label>
+          <span asp-validation-for="genre" class="text-danger"></span>
+          <select asp-for="genre" type="text" class="form-control">
+              <option>TEST</option>
+          </select>
 
-          <label asp-for="ChapterLength"></label>
-          <span asp-validation-for="ChapterLength" class="text-danger"></span>
-          <select asp-for="ChapterLength" class="form-select">
+          <label asp-for="book.ChapterLength"></label>
+          <span asp-validation-for="book.ChapterLength" class="text-danger"></span>
+          <select asp-for="book.ChapterLength" class="form-select">
             <option>Medium</option>
             <option>Unknown/Other</option>
             <option>Short</option>
             <option>Long</option>
           </select>
 
-          <label asp-for="ReadStatus"></label>
-          <span asp-validation-for="ReadStatus" class="text-danger"></span>
-          <select asp-for="ReadStatus" class="form-select">
+          <label asp-for="book.ReadStatus"></label>
+          <span asp-validation-for="book.ReadStatus" class="text-danger"></span>
+          <select asp-for="book.ReadStatus" class="form-select">
               <option>Read</option>
               <option>Re-Read</option>
               <option>Unread</option>
           </select>
 
-          <label asp-for="MediaType"></label>
-          <span asp-validation-for="MediaType" class="text-danger"></span>
-          <select asp-for="MediaType" class="form-select">
+          <label asp-for="book.MediaType"></label>
+          <span asp-validation-for="book.MediaType" class="text-danger"></span>
+          <select asp-for="book.MediaType" class="form-select">
             <option>Paperback</option>
             <option>Hardcover</option>
             <option>Kindle</option>
           </select>
 
-          <label asp-for="SignatureType"></label>
-          <span asp-validation-for="SignatureType" class="text-danger"></span>
-          <select asp-for="SignatureType" class="form-select">
+          <label asp-for="book.SignatureType"></label>
+          <span asp-validation-for="book.SignatureType" class="text-danger"></span>
+          <select asp-for="book.SignatureType" class="form-select">
             <option>None</option>
             <option>Sticker</option>
             <option>Original</option>
             <option>Signature Plate</option>
           </select>
 
-          <label asp-for="CheckedOutTo">Checked Out To</label>
-          <span asp-validation-for="CheckedOutTo" class="text-danger"></span>
-          <input asp-for="CheckedOutTo" type="text" class="form-control">
+          <label asp-for="book.CheckedOutTo">Checked Out To</label>
+          <span asp-validation-for="book.CheckedOutTo" class="text-danger"></span>
+          <input asp-for="book.CheckedOutTo" type="text" class="form-control">
 
-          <label asp-for="Rating"></label>
-          <span asp-validation-for="Rating" class="text-danger"></span>
-          <textarea asp-for="Rating" class="form-control" rows="1"></textarea>
+          <label asp-for="book.Rating"></label>
+          <span asp-validation-for="book.Rating" class="text-danger"></span>
+          <textarea asp-for="book.Rating" class="form-control" rows="1"></textarea>
 
-          <label for="isAnnotated">Annotated?</label>
-          <span asp-validation-for="isAnnotated" class="text-danger"></span>
-          <input id="isAnnotated" asp-for="isAnnotated" class="form-check-input" type="checkbox" rows="1">
+          <label for="book.isAnnotated">Annotated?</label>
+          <span asp-validation-for="book.isAnnotated" class="text-danger"></span>
+          <input id="book.isAnnotated" asp-for="book.isAnnotated" class="form-check-input" type="checkbox" rows="1">
          
-          <label for="isCheckedOut">Checked Out?</label>
-          <span asp-validation-for="isCheckedOut" class="text-danger"></span>
-          <input id="isCheckedOut" asp-for="isCheckedOut" class="form-check-input" type="checkbox" rows="1">
+          <label for="book.isCheckedOut">Checked Out?</label>
+          <span asp-validation-for="book.isCheckedOut" class="text-danger"></span>
+          <input id="book.isCheckedOut" asp-for="book.isCheckedOut" class="form-check-input" type="checkbox" rows="1">
           
-          <label for="isSigned">Signed?</label>
-          <span asp-validation-for="isSigned" class="text-danger"></span>
-          <input id="isSigned" asp-for="isSigned" class="form-check-input" type="checkbox" rows="1">
+          <label for="book.isSigned">Signed?</label>
+          <span asp-validation-for="book.isSigned" class="text-danger"></span>
+          <input id="book.isSigned" asp-for="book.isSigned" class="form-check-input" type="checkbox" rows="1">
           
-          <label for="isStamped">Embossed?</label>
-          <span asp-validation-for="isStamped" class="text-danger"></span>
-          <input id="isStamped" asp-for="isStamped" class="form-check-input" type="checkbox" rows="1">
+          <label for="book.isStamped">Embossed?</label>
+          <span asp-validation-for="book.isStamped" class="text-danger"></span>
+          <input id="book.isStamped" asp-for="book.isStamped" class="form-check-input" type="checkbox" rows="1">
           
-          <label for="isFavorite">Favorite?</label>
-          <span asp-validation-for="isFavorite" class="text-danger"></span>
-          <input id="isFavorite" asp-for="isFavorite" class="form-check-input" type="checkbox" rows="1">
+          <label for="book.isFavorite">Favorite?</label>
+          <span asp-validation-for="book.isFavorite" class="text-danger"></span>
+          <input id="book.isFavorite" asp-for="book.isFavorite" class="form-check-input" type="checkbox" rows="1">
           
 
-          <input id="CoverLink" style="display:none;" asp-for="CoverLink" placeholder="@Model.CoverLink" />
+          <input id="CoverLink" style="display:none;" asp-for="book.CoverLink" placeholder="@Model.book.CoverLink" />
 
         </div>
         </fieldset>
         <fieldset >
         <button asp-action="Edit" type="submit" 
         class="btn btn-warning mt-2"><i class="bi bi-pencil"></i>Commit Edits</button>
-        <a class="btn btn-primary mt-2" asp-controller="Book" asp-action="DetailedView" asp-route-id="@Model.Id">
+        <a class="btn btn-primary mt-2" asp-controller="Book" asp-action="DetailedView" asp-route-id="@Model.book.Id">
             <i class="bi bi-x-circle"></i> Cancel</a>
       </fieldset>
     </form>

@@ -125,32 +125,29 @@ namespace LiteratureLounge.Controllers
         // UPDATE
         public IActionResult Edit(int? id)
         {
-            var book = _db.Books.FirstOrDefault(c => c.Id == id);
-            if (book == null)
+            var _book = _db.Books.FirstOrDefault(c => c.Id == id);
+            if (_book == null)
             {
                 return RedirectToAction("Index");
             }
-            return View(book);
+
+            var model = new BookEditViewModel { book = _book };
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Book book)
+        public IActionResult Edit(BookEditViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (book.Rating > 5)
-                    book.Rating = 5;
-                if (book.Rating < 0)
-                    book.Rating = 0;
+            if (model.book.Rating > 5)
+                model.book.Rating = 5;
+            if (model.book.Rating < 0)
+                model.book.Rating = 0;
 
-                _db.Books.Update(book);
-                _db.SaveChanges();
-                TempData["Success"] = $"Edited Book: {book.Title} successfully!";
-                return RedirectToAction("DetailedView", new { book.Id });
-            }
-            TempData["Error"] = $"Failed to edit book";
-            return RedirectToAction("Index");
+            _db.Books.Update(model.book);
+            _db.SaveChanges();
+            TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
+            return RedirectToAction("DetailedView", new { model.book.Id });
         }
 
         public IActionResult Rating(int? rating, int? id)
