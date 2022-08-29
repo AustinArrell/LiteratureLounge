@@ -130,8 +130,8 @@ namespace LiteratureLounge.Controllers
             {
                 return RedirectToAction("Index");
             }
-
-            var model = new BookEditViewModel { book = _book };
+            var genres = _db.Genres.ToList();
+            var model = new BookEditViewModel { book = _book, Genres = genres };
             return View(model);
         }
 

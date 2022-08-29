@@ -23,10 +23,13 @@
           <span asp-validation-for="book.Notes" class="text-danger"></span>
           <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
 
-          <label asp-for="genre">Genre</label>
-          <span asp-validation-for="genre" class="text-danger"></span>
-          <select asp-for="genre" type="text" class="form-control">
-              <option>TEST</option>
+          <label asp-for="genreName">Genre</label>
+          <span asp-validation-for="genreName" class="text-danger"></span>
+          <select asp-for="genreName" type="text" class="form-control">
+              @foreach(var _genre in Model.Genres)
+              {
+                <option>@_genre.Name</option>
+              }
           </select>
 
           <label asp-for="book.ChapterLength"></label>
@@ -93,6 +96,7 @@
           
 
           <input id="CoverLink" style="display:none;" asp-for="book.CoverLink" placeholder="@Model.book.CoverLink" />
+          <input id="BookId" style="display:none;" asp-for="book.Id" placeholder="@Model.book.Id" />
 
         </div>
         </fieldset>
