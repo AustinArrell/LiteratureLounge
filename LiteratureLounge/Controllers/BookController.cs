@@ -151,6 +151,13 @@ namespace LiteratureLounge.Controllers
             }
             _db.SaveChanges();
 
+            foreach (var genre in model.genreNames) 
+            {
+                var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();
+                var bg = new BookGenre { Genre = _genre};
+                model.book.BookGenres.Add(bg);
+            }
+
             _db.Books.Update(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";

@@ -13,7 +13,7 @@ namespace LiteratureLounge.Models
         [Required]
         public string? ISBN { get; set; }
 
-        public ICollection<BookGenre> BookGenres { get; set; }
+        public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>();
         public string? Notes { get; set; } = "";
         public string? ChapterLength { get; set; } = "Medium";
         public bool isStamped { get; set; } = false;
