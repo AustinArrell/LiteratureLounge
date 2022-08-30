@@ -144,6 +144,13 @@ namespace LiteratureLounge.Controllers
             if (model.book.Rating < 0)
                 model.book.Rating = 0;
 
+            var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
+            foreach (var genre in oldGenres) 
+            {
+                _db.BookGenres.Remove(genre);
+            }
+            _db.SaveChanges();
+
             _db.Books.Update(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";

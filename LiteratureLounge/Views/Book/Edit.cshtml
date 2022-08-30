@@ -1,6 +1,15 @@
-﻿@model BookEditViewModel
+﻿@model BookEditViewModel 
+
 @{
     ViewData["Title"] = "Edit Book";
+}
+
+@section Scripts
+{
+    <script src="~/js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(".multiple-select-list").chosen();
+    </script>
 }
 <div style=" display:flex; justify-content:center;">
     <form method="post" style="width: 50%">
@@ -22,15 +31,17 @@
           <label asp-for="book.Notes"></label>
           <span asp-validation-for="book.Notes" class="text-danger"></span>
           <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
-
-          <label asp-for="genreName">Genre</label>
-          <span asp-validation-for="genreName" class="text-danger"></span>
-          <select asp-for="genreName" type="text" class="form-control">
-              @foreach(var _genre in Model.Genres)
-              {
-                <option>@_genre.Name</option>
-              }
-          </select>
+          
+          <div>
+              <label asp-for="genreName">Genres</label>
+                <select multiple class="multiple-select-list form-control" asp-for="genreNames">
+                <option value=""></option>
+                @foreach(var _genre in Model.Genres)
+                  {
+                    <option>@_genre.Name</option>
+                  }
+              </select>
+          </div>
 
           <label asp-for="book.ChapterLength"></label>
           <span asp-validation-for="book.ChapterLength" class="text-danger"></span>
