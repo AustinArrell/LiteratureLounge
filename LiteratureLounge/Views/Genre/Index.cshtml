@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Genre>
+@{
+    ViewData["Title"] = "Genre";
+}
+
+@section Scripts {
+      <script type="text/javascript" src="~/js/tablesorter.js"></script>
+      <script>
+        $(function() {
+            $("#genreTable").tablesorter();
+        });
+      </script>
+}
+        <div id="test" style="width: 50%; float:left">
+           <h1 class="text-primary">@ViewData["Title"]</h1>
+        </div>
+        <div class="GenreAdd" style="width:50%; float:right; display:flex; justify-content:flex-end;">
+            <div class="btn-group" role="group">
+              <a type="button" class="btn btn-success"><i class="bi bi-plus-circle"></i> Create Genre</a>
+            </div>
+        </div>
+    <div class="search-table-outter">
+        <table id="genreTable" class="table table-bordered table-striped tablesorter" style="width:100%">
+            <thead>
+                <tr class="table-secondary">
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Modify
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var obj in Model)
+            {
+                <tr>
+                    <td>
+                    @obj.Id
+                    </td>
+                    <td>
+                    @obj.Name
+                    </td>
+                    <td style="display:flex; justify-content:center;">
+                        <a asp-controller="Genre" asp-action="Edit" asp-route-id="@obj.Id"
+                    class="btn btn-primary" style="margin-bottom: 10px"><i class="bi bi-pen"></i></a>
+                        <a asp-controller="Genre" asp-action="Delete" asp-route-id="@obj.Id"
+                    class="btn btn-danger" style="margin-bottom: 10px"><i class="bi bi-trash3"></i></a>
+                    </td>
+                </tr> 
+            }
+        </tbody>
+    </table>
+</div>
