@@ -5,6 +5,7 @@ using Purrs_And_Prose.Data;
 using System.Diagnostics;
 using System.Net;
 using System.Web;
+using Microsoft.EntityFrameworkCore;
 
 namespace LiteratureLounge.Controllers
 {
@@ -125,13 +126,23 @@ namespace LiteratureLounge.Controllers
         // UPDATE
         public IActionResult Edit(int? id)
         {
-            var _book = _db.Books.FirstOrDefault(c => c.Id == id);
+            var _book = _db.Books
+                .Include(book => book.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .FirstOrDefault(c => c.Id == id);
             if (_book == null)
             {
                 return RedirectToAction("Index");
             }
+
+            var _genreNames = new List<string>();
+            foreach (var _bg in _book.BookGenres) 
+            {
+                _genreNames.Add(_bg.Genre.Name);
+            }
+
             var genres = _db.Genres.ToList();
-            var model = new BookEditViewModel { book = _book, Genres = genres };
+            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames };
             return View(model);
         }
 
@@ -179,11 +190,16 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult DetailedView(int? id)
         {
-            var book = _db.Books.FirstOrDefault(c => c.Id == id);
+            var book = _db.Books
+                .Include(book => book.BookGenres)
+                .ThenInclude(bg => bg.Genre)
+                .FirstOrDefault(c => c.Id == id);
+
             if (book == null)
             {
                 return RedirectToAction("Index");
             }
+
             BookDetailedViewModel viewModel = new BookDetailedViewModel();
             viewModel.book = book;
             return View(viewModel);

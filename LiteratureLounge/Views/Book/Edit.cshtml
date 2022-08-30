@@ -37,9 +37,15 @@
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
                 <option value=""></option>
                 @foreach(var _genre in Model.Genres)
-                  {
-                    <option>@_genre.Name</option>
-                  }
+                {
+                    if (Model.genreNames.Contains(_genre.Name))
+                    {
+                        <option selected="selected">@_genre.Name</option>
+                    }else
+                    {
+                        <option>@_genre.Name</option>
+                    }
+                }
               </select>
           </div>
 

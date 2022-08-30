@@ -20,6 +20,12 @@
     <div>
         <h4 style="Display:inline">@Model.book.Author - </h4>
         <p style="Display:inline">@(ISBN)</p>
+        <div>
+            @foreach(var _genre in Model.book.BookGenres)
+            {
+                <span class="badge bg-primary"> @(_genre.Genre.Name)</span>
+            }
+        </div>
     </div>
     <hr />
     <div class="coverImage" style="float:left; width:20%; height:auto;">
