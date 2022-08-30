@@ -19,11 +19,11 @@
             <form asp-action="Upload" asp-route-isbn="@Model.book.ISBN" asp-route-id="@Model.book.Id" enctype="multipart/form-data" >   
                 <input class="form-control" type="file" asp-for="file" accept="image/*"/>
                 <div>
-                    <input type="submit" class="btn btn-success" value="Upload"/>
+                    <input type="submit" class="btn btn-primary" value="Upload"/>
                 </div>
             </form>
         <div>
-            <a asp-action="DetailedView" asp-route-id="@Model.book.Id" class="btn btn-primary">Back to Book</a>
+            <a asp-action="DetailedView" asp-route-id="@Model.book.Id" class="btn btn-danger">Back to Book</a>
         </div>
     </div>
     </div>
