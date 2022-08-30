@@ -1,0 +1,22 @@
+﻿@model Genre
+@{
+    ViewData["Title"] = "Create Genre";
+}
+<div style=" display:flex; justify-content:center;">
+    <form method="post" style="width: 50%">
+      <fieldset class="border p-3 mt-2">
+        <h1 class="text-primary">Create Book</h1>
+        <div>
+          <label asp-for="Name"></label>
+          <span asp-validation-for="Name" class="text-danger"></span>
+          <input asp-for="Name" type="text" class="form-control">
+        </div>
+        </fieldset>
+        <fieldset >
+        <button asp-controller="Genre" asp-action="Create" type="submit" 
+        class="btn btn-primary mt-2"><i class="bi bi-check2"></i> Create</button>
+        <a class="btn btn-danger mt-2" asp-controller="Genre" asp-action="Index">
+            <i class="bi bi-x-circle"></i> Cancel</a>
+      </fieldset>
+    </form>
+</div>

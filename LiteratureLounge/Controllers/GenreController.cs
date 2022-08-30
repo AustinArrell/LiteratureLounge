@@ -22,6 +22,26 @@ namespace LiteratureLounge.Controllers
             return View(genres);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Genre genre)
+        {
+            if (genre is not null) 
+            {
+                _db.Genres.Add(genre);
+                _db.SaveChanges();
+                TempData["Success"] = "Created Genre Successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["Success"] = "Created Genre Successfully";
+            return View();
+        }
+
         public IActionResult Edit(int? id)
         {
             var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();

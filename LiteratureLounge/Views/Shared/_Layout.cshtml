@@ -35,13 +35,13 @@
                             <a class="nav-link text-dark" asp-controller="Book" asp-action="Create">Create Book Manually</a>
                           </div>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Genres</a>
+                          <div class="dropdown-menu">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="Index">View Genres</a>
+                            <a class="nav-link text-dark" asp-controller="Genre" asp-action="Create" >Create Genre</a>
+                          </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Genre" asp-action="Index" >Genres</a>
-                        </li>
-                        
-                        
                     </ul>
                 </div>
             </div>
