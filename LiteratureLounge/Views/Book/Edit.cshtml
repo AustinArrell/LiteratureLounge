@@ -8,7 +8,7 @@
 {
     <script src="~/js/chosen.jquery.js"></script>
     <script type="text/javascript">
-        $(".multiple-select-list").chosen();
+            $(".multiple-select-list").chosen({ width: '100%' });
     </script>
 }
 <div style=" display:flex; justify-content:center;">
@@ -32,9 +32,9 @@
           <span asp-validation-for="book.Notes" class="text-danger"></span>
           <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
           
-          <div>
+          <div >
               <label asp-for="genreName">Genres</label>
-               <a asp-controller="Genre" asp-action="Create"><i class="bi bi-plus-circle"></i></a>
+               <a style="float:right;" asp-controller="Genre" asp-action="Create">Create Genres<i class="bi bi-plus-circle"></i></a>
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
                 <option value=""></option>
                 @foreach(var _genre in Model.Genres)
