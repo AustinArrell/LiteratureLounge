@@ -22,6 +22,32 @@ namespace LiteratureLounge.Controllers
             return View(genres);
         }
 
+        public IActionResult Edit(int? id)
+        {
+            var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
+            if (genre is not null)
+            {
+                return View(genre);
+            }
+            TempData["Error"] = "Failed to Edit Genre - Genre Null";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Genre genre)
+        {
+            if (genre is not null) 
+            {
+                _db.Genres.Update(genre);
+                _db.SaveChanges();
+                TempData["Success"] = $"Edited Genre {genre.Name} Successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["Error"] = "Failed to Edit Genre - Genre Null";
+            return RedirectToAction("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
