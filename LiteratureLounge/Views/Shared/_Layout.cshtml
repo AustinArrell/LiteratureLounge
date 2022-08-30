@@ -27,15 +27,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Books</a>
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Books</a>
+                          <div class="dropdown-menu">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">View Books</a>
+                            <a class="nav-link text-dark" asp-controller="Book" asp-action="CreateFromISBN" >Create Book From ISBN</a>
+                            <a class="nav-link text-dark" asp-controller="Book" asp-action="Create">Create Book Manually</a>
+                          </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Book" asp-action="CreateFromISBN" >Create Book</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Genre" asp-action="Index" >Genres</a>
                         </li>
+                        
                         
                     </ul>
                 </div>
