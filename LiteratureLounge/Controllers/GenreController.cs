@@ -42,6 +42,32 @@ namespace LiteratureLounge.Controllers
             return View();
         }
 
+        public IActionResult Delete(int? id)
+        {
+            var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
+            if (genre is not null)
+            {
+                return View(genre);
+            }
+            TempData["Error"] = "Failed to Find Genre - Genre Null";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Genre genre)
+        {
+            if (genre is not null)
+            {
+                _db.Genres.Remove(genre);
+                _db.SaveChanges();
+                TempData["Success"] = $"Deleted Genre {genre.Name} Successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["Error"] = "Failed to Delete Genre - Genre Null";
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Edit(int? id)
         {
             var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
