@@ -35,6 +35,7 @@ namespace LiteratureLounge.Tools
             book.ISBN = isbn;
             book.Author = (string)bookData["volumeInfo"]["authors"].First;
             book.Title = (string)bookData["volumeInfo"]["title"];
+            book.PublishedDate = (string)bookData["volumeInfo"]["publishedDate"];
             return book;
         }
     }

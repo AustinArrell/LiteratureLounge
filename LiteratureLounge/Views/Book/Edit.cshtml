@@ -28,6 +28,10 @@
           <span asp-validation-for="book.ISBN" class="text-danger"></span>
           <textarea asp-for="book.ISBN" class="form-control" rows="1"></textarea>
 
+        <label asp-for="book.PublishedDate"></label>
+        <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
+        <input asp-for="book.PublishedDate" type="date" class="form-control" rows="1">
+
           <label asp-for="book.Notes"></label>
           <span asp-validation-for="book.Notes" class="text-danger"></span>
           <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>

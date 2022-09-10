@@ -25,7 +25,7 @@ namespace LiteratureLounge.Models
         public string? MediaType { get; set; } = "Paperback";
         public string? CoverLink { get; set; } = "";
         public float? Rating { get; set; } = 0;
-
+        public string PublishedDate { get; set; }
         public string? CheckedOutTo { get; set; } = "";
         public string? SignatureType { get; set; } = "";
     }
