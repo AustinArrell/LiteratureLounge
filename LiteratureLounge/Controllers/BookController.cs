@@ -16,7 +16,6 @@ namespace LiteratureLounge.Controllers
         BookLookup booklookup = new BookLookup();
         private readonly IWebHostEnvironment hostingEnvironment;
 
-
         public BookController(ILogger<HomeController> logger, ApplicationDbContext db, IWebHostEnvironment enviornment)
         {
             _db = db;
@@ -30,7 +29,6 @@ namespace LiteratureLounge.Controllers
             return View(books);
         }
 
-        // CREATE
         public IActionResult Create()
         {
             var genres = _db.Genres.ToList();
@@ -56,13 +54,6 @@ namespace LiteratureLounge.Controllers
                 }
             }
 
-            var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
-            foreach (var genre in oldGenres)
-            {
-                _db.BookGenres.Remove(genre);
-            }
-            _db.SaveChanges();
-
             foreach (var genre in model.genreNames)
             {
                 var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();
@@ -74,8 +65,8 @@ namespace LiteratureLounge.Controllers
             _db.SaveChanges();
             TempData["Success"] = $"Added book successfully!";
             return RedirectToAction("DetailedView", new { model.book.Id });
-            
         }
+
         public IActionResult CreateFromISBN()
         {
             return View();
