@@ -33,42 +33,48 @@ namespace LiteratureLounge.Controllers
         // CREATE
         public IActionResult Create()
         {
-            return View();
+            var genres = _db.Genres.ToList();
+            return View(new BookEditViewModel {Genres = genres });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Book book)
+        public IActionResult Create(BookEditViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (book.Rating > 5)
-                    book.Rating = 5;
-                if (book.Rating < 0)
-                    book.Rating = 0;
-                var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
-                foreach (var _isbn in ISBNs) 
-                {
-                    if (_isbn == book.ISBN) 
-                    {
-                        TempData["Error"] = $"Book has duplicate ISBN!";
-                        return RedirectToAction("Create");
-                    }
-                }
+            if (model.book.Rating > 5)
+                model.book.Rating = 5;
+            if (model.book.Rating < 0)
+                model.book.Rating = 0;
 
-                _db.Books.Add(book);
-                _db.SaveChanges();
-                TempData["Success"] = $"Added book successfully!";
-                return RedirectToAction("Index");
-            }
-            else
+            var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
+            foreach (var _isbn in ISBNs) 
             {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                                       .Where(y => y.Count > 0)
-                                       .ToList();
-                TempData["Error"] = $"Failed to add book!";
-                return View(book);
+                if (_isbn == model.book.ISBN) 
+                {
+                    TempData["Error"] = $"Book has duplicate ISBN!";
+                    return RedirectToAction("Create");
+                }
             }
+
+            var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
+            foreach (var genre in oldGenres)
+            {
+                _db.BookGenres.Remove(genre);
+            }
+            _db.SaveChanges();
+
+            foreach (var genre in model.genreNames)
+            {
+                var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();
+                var bg = new BookGenre { Genre = _genre };
+                model.book.BookGenres.Add(bg);
+            }
+
+            _db.Books.Add(model.book);
+            _db.SaveChanges();
+            TempData["Success"] = $"Added book successfully!";
+            return RedirectToAction("DetailedView", new { model.book.Id });
+            
         }
         public IActionResult CreateFromISBN()
         {
