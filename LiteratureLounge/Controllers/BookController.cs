@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Web;
 using Microsoft.EntityFrameworkCore;
+using LiteratureLounge.Migrations;
 
 namespace LiteratureLounge.Controllers
 {
@@ -139,7 +140,7 @@ namespace LiteratureLounge.Controllers
             }
 
             var genres = _db.Genres.ToList();
-            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames };
+            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames};
             return View(model);
         }
 

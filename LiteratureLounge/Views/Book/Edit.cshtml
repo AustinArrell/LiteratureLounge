@@ -38,7 +38,6 @@
           
           <div >
               <label asp-for="genreName">Genres</label>
-               <a style="float:right;" asp-controller="Genre" asp-action="Create">Create Genres<i class="bi bi-plus-circle"></i></a>
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
                 <option value=""></option>
                 @foreach(var _genre in Model.Genres)
