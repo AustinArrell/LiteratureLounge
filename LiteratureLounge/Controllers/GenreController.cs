@@ -33,12 +33,21 @@ namespace LiteratureLounge.Controllers
         {
             if (genre is not null) 
             {
+                var _genres = _db.Genres.ToList();
+                foreach (var _genre in _genres)
+                {
+                    if (_genre.Name == genre.Name) 
+                    {
+                        TempData["Error"] = "Failed to Create Duplicate Genre";
+                        return View();
+                    }
+                }
                 _db.Genres.Add(genre);
                 _db.SaveChanges();
                 TempData["Success"] = "Created Genre Successfully";
                 return RedirectToAction("Index");
             }
-            TempData["Success"] = "Created Genre Successfully";
+            TempData["Error"] = "Failed to Create Null Genre";
             return View();
         }
 
