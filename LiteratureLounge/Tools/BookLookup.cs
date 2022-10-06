@@ -39,6 +39,7 @@ namespace LiteratureLounge.Tools
             book.Subtitle = (string)bookData["volumeInfo"]["subtitle"];
             book.Description = (string)bookData["volumeInfo"]["description"];
             book.Publisher = (string)bookData["volumeInfo"]["publisher"];
+            book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
             return book;
         }
     }

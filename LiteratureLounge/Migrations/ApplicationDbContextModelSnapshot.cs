@@ -51,6 +51,9 @@ namespace LiteratureLounge.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PageCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("PublishedDate")
                         .HasColumnType("longtext");
 

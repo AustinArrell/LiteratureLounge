@@ -11,8 +11,8 @@ using Purrs_And_Prose.Data;
 namespace LiteratureLounge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221006202459_initial")]
-    partial class initial
+    [Migration("20221006231022_addedPageCount")]
+    partial class addedPageCount
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,9 @@ namespace LiteratureLounge.Migrations
                     b.Property<string>("CoverLink")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ISBN")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -50,7 +53,13 @@ namespace LiteratureLounge.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("PageCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("PublishedDate")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Publisher")
                         .HasColumnType("longtext");
 
                     b.Property<float?>("Rating")
@@ -60,6 +69,9 @@ namespace LiteratureLounge.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("SignatureType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Subtitle")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Title")

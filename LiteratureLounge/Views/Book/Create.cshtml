@@ -46,6 +46,10 @@
             <span asp-validation-for="book.Notes" class="text-danger"></span>
             <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
 
+            <label asp-for="book.PageCount"></label>
+            <span asp-validation-for="book.PageCount" class="text-danger"></span>
+            <input asp-for="book.PageCount" type="number" class="form-control">
+
             <div >
                 <label asp-for="genreName">Genres</label>
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
