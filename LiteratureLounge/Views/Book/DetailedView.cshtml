@@ -4,7 +4,7 @@
     ViewData["Title"] = @Model.book.Title;
     var ISBN = @Model.book.ISBN;
 }
-
+<div>
 <h1>
     @if (!Model.book.isFavorite)
     {
@@ -13,11 +13,13 @@
     {
         <i class="bi bi-suit-heart-fill"></i>
     }
-    @Model.book.Title</h1>
+        @Model.book.Title - @Model.book.Subtitle
+    </h1>
+</div>
 
 <div>
     <div>
-        <h4 style="Display:inline">@Model.book.Author - </h4>
+        <h5 style="Display:inline">@Model.book.Author - </h5>
         <p style="Display:inline">@(ISBN)</p>
         <div>
             @foreach(var _genre in Model.book.BookGenres)

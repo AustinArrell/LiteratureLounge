@@ -20,6 +20,10 @@
           <span asp-validation-for="book.Title" class="text-danger"></span>
           <input asp-for="book.Title" type="text" class="form-control">
 
+        <label asp-for="book.Subtitle"></label>
+        <span asp-validation-for="book.Subtitle" class="text-danger"></span>
+        <input asp-for="book.Subtitle" type="text" class="form-control">
+
           <label asp-for="book.Author"></label>
           <span asp-validation-for="book.Author" class="text-danger"></span>
           <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>

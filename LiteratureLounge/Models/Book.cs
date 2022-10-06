@@ -8,6 +8,7 @@ namespace LiteratureLounge.Models
         public int Id { get; set; }
         [Required]
         public string? Title { get; set; }
+        public string? Subtitle { get; set; }
         [Required]
         public string? Author { get; set; }
         [Required]
