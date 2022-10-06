@@ -12,15 +12,16 @@
     {
         <i class="bi bi-suit-heart-fill"></i>
     }
-        @Model.book.Title - 
+        @Model.book.Title 
 </h1>
 <h4 style="display:inline;">@Model.book.Subtitle</h4>
 
 <div>
     <div>
         <h5 style="Display:inline">@Model.book.Author - </h5>
-        <p style="display:inline;">@Model.book.Publisher -</p>
-        <p style="Display:inline">@(ISBN)</p>
+         
+        <p style="Display:inline">@(ISBN) </p>
+        <p>@Model.book.Publisher</p>
         <div>
             @foreach(var _genre in Model.book.BookGenres)
             {
