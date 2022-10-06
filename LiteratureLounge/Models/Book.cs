@@ -13,7 +13,8 @@ namespace LiteratureLounge.Models
         public string? Author { get; set; }
         [Required]
         public string? ISBN { get; set; }
-
+        public string? Publisher { get; set; }
+        public string? Description { get; set; }
         public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>();
         public string? Notes { get; set; } = "";
         public string? ChapterLength { get; set; } = "Medium";

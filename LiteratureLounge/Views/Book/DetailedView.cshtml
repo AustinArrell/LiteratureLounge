@@ -4,8 +4,7 @@
     ViewData["Title"] = @Model.book.Title;
     var ISBN = @Model.book.ISBN;
 }
-<div>
-<h1>
+<h1 style="display:inline;">
     @if (!Model.book.isFavorite)
     {
         <i class="bi bi-suit-heart"></i>
@@ -13,13 +12,14 @@
     {
         <i class="bi bi-suit-heart-fill"></i>
     }
-        @Model.book.Title - @Model.book.Subtitle
-    </h1>
-</div>
+        @Model.book.Title - 
+</h1>
+<h4 style="display:inline;">@Model.book.Subtitle</h4>
 
 <div>
     <div>
         <h5 style="Display:inline">@Model.book.Author - </h5>
+        <p style="display:inline;">@Model.book.Publisher -</p>
         <p style="Display:inline">@(ISBN)</p>
         <div>
             @foreach(var _genre in Model.book.BookGenres)
@@ -59,13 +59,20 @@
             }
             (@Model.book.Rating)
         </dd>
+        <hr />
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.book.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.book.Description)
+        </dd>
+        <hr />
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.book.Notes)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.book.Notes)
         </dd>
-        <hr />
         <dt class = "col-sm-2">
             Chapter Length
         </dt>

@@ -14,40 +14,48 @@
       <fieldset class="border p-3 mt-2">
         <h1 class="text-primary">Create Book</h1>
         <div>
-          <label asp-for="book.Title"></label>
-          <span asp-validation-for="book.Title" class="text-danger"></span>
-          <input asp-for="book.Title" type="text" class="form-control">
+            <label asp-for="book.Title"></label>
+            <span asp-validation-for="book.Title" class="text-danger"></span>
+            <input asp-for="book.Title" type="text" class="form-control">
                     
-          <label asp-for="book.Subtitle"></label>
-          <span asp-validation-for="book.Subtitle" class="text-danger"></span>          
-          <input asp-for="book.Subtitle" type="text" class="form-control">
+            <label asp-for="book.Subtitle"></label>
+            <span asp-validation-for="book.Subtitle" class="text-danger"></span>          
+            <input asp-for="book.Subtitle" type="text" class="form-control">
 
-          <label asp-for="book.Author"></label>
-          <span asp-validation-for="book.Author" class="text-danger"></span>
-          <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>
-          
-          <label asp-for="book.ISBN"></label>
-          <span asp-validation-for="book.ISBN" class="text-danger"></span>
-          <textarea asp-for="book.ISBN" class="form-control" rows="1"></textarea>
+            <label asp-for="book.Author"></label>
+            <span asp-validation-for="book.Author" class="text-danger"></span>
+            <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>
 
-        <label asp-for="book.PublishedDate"></label>
-        <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
-        <input asp-for="book.PublishedDate" type="date" class="form-control" rows="1">
+            <label asp-for="book.Description"></label>
+            <span asp-validation-for="book.Description" class="text-danger"></span>
+            <textarea asp-for="book.Description" class="form-control" rows="1"></textarea>
 
-          <label asp-for="book.Notes"></label>
-          <span asp-validation-for="book.Notes" class="text-danger"></span>
-          <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
+            <label asp-for="book.ISBN"></label>
+            <span asp-validation-for="book.ISBN" class="text-danger"></span>
+            <textarea asp-for="book.ISBN" class="form-control" rows="1"></textarea>
 
-          <div >
-              <label asp-for="genreName">Genres</label>
+            <label asp-for="book.Publisher"></label>
+            <span asp-validation-for="book.Publisher" class="text-danger"></span>
+            <input asp-for="book.Publisher" type="text" class="form-control">
+            
+            <label asp-for="book.PublishedDate"></label>
+            <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
+            <input asp-for="book.PublishedDate" type="date" class="form-control" rows="1">
+
+            <label asp-for="book.Notes"></label>
+            <span asp-validation-for="book.Notes" class="text-danger"></span>
+            <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
+
+            <div >
+                <label asp-for="genreName">Genres</label>
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
                 <option value=""></option>
                         @foreach (var _genre in Model.Genres)
                         {
-                             <option>@_genre.Name</option>
+                                <option>@_genre.Name</option>
                         }
-              </select>
-          </div>
+                </select>
+            </div>
 
           <label asp-for="book.ChapterLength"></label>
           <span asp-validation-for="book.ChapterLength" class="text-danger"></span>
