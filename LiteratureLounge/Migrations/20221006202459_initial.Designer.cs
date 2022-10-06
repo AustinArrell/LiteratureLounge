@@ -11,14 +11,14 @@ using Purrs_And_Prose.Data;
 namespace LiteratureLounge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220920031859_pubdate")]
-    partial class pubdate
+    [Migration("20221006202459_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LiteratureLounge.Models.Book", b =>
