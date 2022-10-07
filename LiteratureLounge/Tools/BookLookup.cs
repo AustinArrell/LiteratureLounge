@@ -18,7 +18,7 @@ namespace LiteratureLounge.Tools
 
         private async Task<string> RequestBookDetails(string isbn) 
         {
-            string url = @$"https://www.googleapis.com/books/v1/volumes?q={isbn}&orderBy=relevance";
+            string url = @$"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&orderBy=relevance";
             HttpResponseMessage response = await client.GetAsync(url);
             return await response.Content.ReadAsStringAsync();
         }
