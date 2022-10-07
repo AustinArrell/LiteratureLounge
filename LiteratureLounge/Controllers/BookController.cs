@@ -77,7 +77,7 @@ namespace LiteratureLounge.Controllers
         {
             viewModel.ISBN = CleanISBN(viewModel.ISBN);
             Book book = await booklookup.LookupBookDetails(viewModel.ISBN);
-            if (!System.IO.File.Exists($"wwwroot/Images/Covers/{viewModel.ISBN}.jpg"))
+            if (!System.IO.File.Exists($"wwwroot/Images/Covers/{viewModel.ISBN}.jpg") && book.ISBN is not null)
             {
                 WebClient webClient = new WebClient();
 

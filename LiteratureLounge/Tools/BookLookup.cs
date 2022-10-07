@@ -27,15 +27,18 @@ namespace LiteratureLounge.Tools
         {
             JObject responseObject = JObject.Parse(responseBody);
             JToken bookList = responseObject.SelectToken("items");
-            foreach (var book in bookList) 
+            if (bookList is not null)
             {
-                var _isbnList = book["volumeInfo"]["industryIdentifiers"];
-
-                foreach (var _isbn in _isbnList) 
+                foreach (var book in bookList)
                 {
-                    if ((string)_isbn["identifier"] == isbn) 
+                    var _isbnList = book["volumeInfo"]["industryIdentifiers"];
+
+                    foreach (var _isbn in _isbnList)
                     {
-                        return book;
+                        if ((string)_isbn["identifier"] == isbn)
+                        {
+                            return book;
+                        }
                     }
                 }
             }
