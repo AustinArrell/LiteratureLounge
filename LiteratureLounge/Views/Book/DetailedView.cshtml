@@ -19,9 +19,18 @@
 <div>
     <div>
         <h5 style="Display:inline">@Model.book.Author - </h5>
-         
         <p style="Display:inline">@(ISBN) </p>
-        <p>@Model.book.Publisher</p>
+        @if (Model.book.Series is not null)
+        {
+            <div>
+                <b>Series:</b> @Model.book.Series
+            </div>
+        }
+        <div>
+            @Model.book.Publisher
+        </div>
+        
+        
         <div>
             @foreach(var _genre in Model.book.BookGenres)
             {
@@ -91,7 +100,17 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.book.ReadStatus)
+            
         </dd>
+        @if (Model.book.ReadStatus is not null && Model.book.ReadStatus != "Unread")
+        {
+            <dt class="col-sm-2">
+                Read Date
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.book.ReadDate)
+            </dd>
+        }
         <dt class = "col-sm-2">
             Media Type
         </dt>

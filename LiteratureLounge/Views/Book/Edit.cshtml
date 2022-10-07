@@ -24,6 +24,10 @@
             <span asp-validation-for="book.Subtitle" class="text-danger"></span>
             <input asp-for="book.Subtitle" type="text" class="form-control">
 
+            <label asp-for="book.Series"></label>
+            <span asp-validation-for="book.Series" class="text-danger"></span>          
+            <input asp-for="book.Series" type="text" class="form-control">
+
             <label asp-for="book.Author"></label>
             <span asp-validation-for="book.Author" class="text-danger"></span>
             <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>
@@ -43,6 +47,10 @@
             <label asp-for="book.PublishedDate"></label>
             <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
             <input asp-for="book.PublishedDate" type="date" class="form-control" rows="1">
+
+            <label asp-for="book.ReadDate"></label>
+            <span asp-validation-for="book.ReadDate" class="text-danger"></span>
+            <input asp-for="book.ReadDate" type="date" class="form-control" rows="1">
 
             <label asp-for="book.Notes"></label>
             <span asp-validation-for="book.Notes" class="text-danger"></span>

@@ -18,6 +18,8 @@ namespace LiteratureLounge.Models
         public int? PageCount { get; set; }
         public ICollection<BookGenre> BookGenres { get; set; } = new List<BookGenre>();
         public string? Notes { get; set; } = "";
+        public string? Series { get; set; }
+        public string? ReadDate { get; set; }
         public string? ChapterLength { get; set; } = "Medium";
         public bool isStamped { get; set; } = false;
         public bool isAnnotated { get; set; } = false;
