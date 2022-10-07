@@ -28,10 +28,7 @@ namespace LiteratureLounge.Tools
                     webClient.DownloadFile(@$"https://pictures.abebooks.com/isbn/{isbn}.jpg", $"wwwroot/Images/Covers/{isbn}.jpg");
                     webClient.Dispose();
                 }
-                catch 
-                {
-                    
-                }
+                catch {}
             }
         }
 
@@ -73,11 +70,16 @@ namespace LiteratureLounge.Tools
                     book.Author = (string)bookData["volumeInfo"]["authors"].First;
                 else
                     book.Author = "Unknown";
-                book.Title = (string)bookData["volumeInfo"]["title"];
-                book.PublishedDate = (string)bookData["volumeInfo"]["publishedDate"];
-                book.Subtitle = (string)bookData["volumeInfo"]["subtitle"];
-                book.Description = (string)bookData["volumeInfo"]["description"];
-                book.Publisher = (string)bookData["volumeInfo"]["publisher"];
+                if (bookData["volumeInfo"]["title"] is not null)
+                    book.Title = (string)bookData["volumeInfo"]["title"];
+                if (bookData["volumeInfo"]["publishedDate"] is not null)
+                    book.PublishedDate = (string)bookData["volumeInfo"]["publishedDate"];
+                if (bookData["volumeInfo"]["subtitle"] is not null)
+                    book.Subtitle = (string)bookData["volumeInfo"]["subtitle"];
+                if (bookData["volumeInfo"]["description"] is not null)
+                    book.Description = (string)bookData["volumeInfo"]["description"];
+                if (bookData["volumeInfo"]["publisher"] is not null)
+                    book.Publisher = (string)bookData["volumeInfo"]["publisher"];
                 if (bookData["volumeInfo"]["pageCount"] is not null)
                     book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
             }

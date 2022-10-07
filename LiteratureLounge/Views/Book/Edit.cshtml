@@ -36,7 +36,7 @@
             
             <label asp-for="book.Author"></label>
             <span asp-validation-for="book.Author" class="text-danger"></span>
-            <textarea asp-for="book.Author" class="form-control" rows="1"></textarea>
+            <input asp-for="book.Author" type="text" class="form-control">
 
             <label asp-for="book.Description"></label>
             <span asp-validation-for="book.Description" class="text-danger"></span>
@@ -44,7 +44,7 @@
           
             <label asp-for="book.ISBN"></label>
             <span asp-validation-for="book.ISBN" class="text-danger"></span>
-            <textarea asp-for="book.ISBN" class="form-control" rows="1"></textarea>
+            <input asp-for="book.ISBN" type="text" class="form-control">
 
             <label asp-for="book.Publisher"></label>
             <span asp-validation-for="book.Publisher" class="text-danger"></span>
@@ -60,7 +60,7 @@
 
             <label asp-for="book.Notes"></label>
             <span asp-validation-for="book.Notes" class="text-danger"></span>
-            <textarea asp-for="book.Notes" class="form-control" rows="1"></textarea>
+            <textarea asp-for="book.Notes" class="form-control" rows="6"></textarea>
 
             <label asp-for="book.PageCount"></label>
             <span asp-validation-for="book.PageCount" class="text-danger"></span>
@@ -123,7 +123,7 @@
 
           <label asp-for="book.Rating"></label>
           <span asp-validation-for="book.Rating" class="text-danger"></span>
-          <textarea asp-for="book.Rating" class="form-control" rows="1"></textarea>
+          <input asp-for="book.Rating" type="number" class="form-control">
 
           <label for="book.isAnnotated">Annotated?</label>
           <span asp-validation-for="book.isAnnotated" class="text-danger"></span>
