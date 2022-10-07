@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using LiteratureLounge.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace LiteratureLounge.Tools
 {
@@ -13,7 +14,25 @@ namespace LiteratureLounge.Tools
         {
             string responseBody = await RequestBookDetails(isbn);
             JToken bookData = ParseJsonResponse(responseBody, isbn);
+            DownloadCover(isbn);
             return BuildNewBook(isbn, bookData);
+        }
+
+        private void DownloadCover(string isbn) 
+        {
+            if (!File.Exists($"wwwroot/Images/Covers/{isbn}.jpg") && isbn is not null)
+            {
+                try
+                {
+                    WebClient webClient = new WebClient();
+                    webClient.DownloadFile(@$"https://pictures.abebooks.com/isbn/{isbn}.jpg", $"wwwroot/Images/Covers/{isbn}.jpg");
+                    webClient.Dispose();
+                }
+                catch 
+                {
+                    
+                }
+            }
         }
 
         private async Task<string> RequestBookDetails(string isbn) 
@@ -50,13 +69,21 @@ namespace LiteratureLounge.Tools
             if (bookData is not null)
             {
                 book.ISBN = isbn;
-                book.Author = (string)bookData["volumeInfo"]["authors"].First;
+                if (bookData["volumeInfo"]["authors"] is not null)
+                    book.Author = (string)bookData["volumeInfo"]["authors"].First;
+                else
+                    book.Author = "Unknown";
                 book.Title = (string)bookData["volumeInfo"]["title"];
                 book.PublishedDate = (string)bookData["volumeInfo"]["publishedDate"];
                 book.Subtitle = (string)bookData["volumeInfo"]["subtitle"];
                 book.Description = (string)bookData["volumeInfo"]["description"];
                 book.Publisher = (string)bookData["volumeInfo"]["publisher"];
-                book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
+                if (bookData["volumeInfo"]["pageCount"] is not null)
+                    book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
+            }
+            else 
+            {
+                throw new Exception("Failed to locate book with this ISBN");
             }
             return book;
         }

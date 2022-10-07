@@ -75,18 +75,11 @@ namespace LiteratureLounge.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFromISBN(ISBNBookCreateViewModel viewModel)
         {
-            viewModel.ISBN = CleanISBN(viewModel.ISBN);
-            Book book = await booklookup.LookupBookDetails(viewModel.ISBN);
-            if (!System.IO.File.Exists($"wwwroot/Images/Covers/{viewModel.ISBN}.jpg") && book.ISBN is not null)
-            {
-                WebClient webClient = new WebClient();
-
-                webClient.DownloadFile(@$"https://pictures.abebooks.com/isbn/{viewModel.ISBN}.jpg", $"wwwroot/Images/Covers/{viewModel.ISBN}.jpg");
-                webClient.Dispose();
-            }
-
             try
             {
+                viewModel.ISBN = CleanISBN(viewModel.ISBN);
+                Book book = await booklookup.LookupBookDetails(viewModel.ISBN);
+                
                 book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
                 var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
                 foreach (var _isbn in ISBNs)
@@ -105,7 +98,8 @@ namespace LiteratureLounge.Controllers
             }
             catch (Exception e)
             {
-                TempData["Error"] = $"Failed to add book! ISBN not found! Please make this book manually";
+                Console.WriteLine(e);
+                TempData["Error"] = e.Message;
             }
             return RedirectToAction("CreateFromISBN");
         }
