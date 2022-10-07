@@ -137,8 +137,15 @@ namespace LiteratureLounge.Controllers
                 _genreNames.Add(_bg.Genre.Name);
             }
 
+            var _seriesNames = new List<string>();
+            foreach (var _bs in _db.Books.Select(row => row.Series).ToArray()) 
+            {
+                if(_bs is not null)
+                    _seriesNames.Add(_bs);
+            }
+
             var genres = _db.Genres.ToList();
-            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames};
+            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames, SeriesNames = _seriesNames};
             return View(model);
         }
 
