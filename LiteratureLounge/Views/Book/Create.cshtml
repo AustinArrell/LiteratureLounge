@@ -23,8 +23,14 @@
             <input asp-for="book.Subtitle" type="text" class="form-control">
 
             <label asp-for="book.Series"></label>
-            <span asp-validation-for="book.Series" class="text-danger"></span>          
-            <input asp-for="book.Series" type="text" class="form-control">
+            <span asp-validation-for="book.Series" class="text-danger"></span>
+            <input asp-for="book.Series" list="SeriesDataList" type="text" class="form-select form-control-plaintext">
+            <datalist id="SeriesDataList">
+            @foreach (var series in Model.SeriesNames)
+            {
+                <option>@series</option>
+            }
+            </datalist>
 
             <label asp-for="book.Author"></label>
             <span asp-validation-for="book.Author" class="text-danger"></span>
