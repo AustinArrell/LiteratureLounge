@@ -26,7 +26,7 @@ namespace LiteratureLounge.Models
         public bool isCheckedOut { get; set; } = false;
         public bool isSigned { get; set; } = false;
         public bool isFavorite { get; set; } = false;
-        public string? ReadStatus { get; set; } = "Read";
+        public string? ReadStatus { get; set; }
         public string? MediaType { get; set; } = "Paperback";
         public string? CoverLink { get; set; } = "";
         public float? Rating { get; set; } = 0;

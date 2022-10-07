@@ -1,20 +1,60 @@
-﻿@{
+﻿@model HomeIndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/plotly.js"></script>
 
+    <script>
+        const colors = ['#369', '#eb6864', '#22b24c', '#aaa', '#f5e625'];
+        var readBooks = document.querySelector('#bookReadCount').innerHTML;
+        var unreadBooks = document.querySelector('#bookUnreadCount').innerHTML;
+        var readData = [{
+            y: [readBooks, unreadBooks],
+            x: ['Read', 'Unread'],
+            type: 'bar',
+            textinfo: "label+percent+value",
+            marker: { color: colors }
+            
+        }];
+
+        var readLayout = {
+            height: 400,
+            width: 500
+        };
+
+        var readBookPages = document.querySelector('#bookReadPageCount').innerHTML;
+        var unreadBookPages = document.querySelector('#bookUnreadPageCount').innerHTML;
+        var pageReadData = [{
+            y: [readBookPages, unreadBookPages],
+            x: ['Read Pages', 'Unread Pages'],
+            type: 'bar',
+            textinfo: "label+value+percent",
+            marker: { color: colors }
+        }];
+
+        var pageReadLayout = {
+            height: 400,
+            width: 500
+        };
+
+        Plotly.newPlot('readDataChart', readData, readLayout, { displaylogo: false });
+        Plotly.newPlot('readPagesChart', pageReadData, pageReadLayout, { displaylogo: false });
+
+    </script>
+}
 <div class="text-center">
     <h1 class="display-4">Bugs Books</h1>
+        <h4>@Model.Books.Count() books catalogued!</h4>
+        <h6 id="bookPageCount">@Model.Books.Select(b => b.PageCount).Sum() total pages </h6>
 </div>
+    <div style="Display:flex; justify-content:center;">
+        <div id="readDataChart" style="height:100%;"></div>
+        <div id="readPagesChart" style="height:100%;"></div>
+    </div>
 
-<h2>TO DO</h2>
-<li>Import/Export CSV</li>
-<li>Add Release Date to Books</li>
-<li>Column Chooser</li>
-<li>Make Cover List View</li>
-<li>Filters, Search box, Archive</li>
-<li>Series and Genres</li>
-<li>Favorites View</li>
-<li>Add pages for all other media types: CDs, DvDs, Games, Records</li>
-
-<h2>Bugs</h2>
-<li>No Width Spaces are not accounted for in ISBN</li>
+    <p style='Display:none;'id="bookReadCount">@Model.Books.Where(b => b.ReadStatus is not null && b.ReadStatus != "Unread").Count()</p>
+    <p style='Display:none;'id="bookUnreadCount">@Model.Books.Where(b => b.ReadStatus != "Read").Count()</p>
+    <p style='Display:none;'id="bookReadPageCount">@Model.Books.Where(b => b.ReadStatus is not null && b.ReadStatus != "Unread" ).Select(b => b.PageCount).Sum() </p>
+    <p style='Display:none;'id="bookUnreadPageCount">@Model.Books.Where(b => b.ReadStatus != "Read").Select(b => b.PageCount).Sum() </p>
