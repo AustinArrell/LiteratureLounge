@@ -105,9 +105,9 @@ namespace LiteratureLounge.Controllers
             }
             catch (Exception e)
             {
-                TempData["Error"] = $"Failed to add book! {e.Message}";
+                TempData["Error"] = $"Failed to add book! ISBN not found! Please make this book manually";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("CreateFromISBN");
         }
 
         private string CleanISBN(string isbn)
@@ -140,8 +140,13 @@ namespace LiteratureLounge.Controllers
             var _seriesNames = new List<string>();
             foreach (var _bs in _db.Books.Select(row => row.Series).ToArray()) 
             {
-                if(_bs is not null)
-                    _seriesNames.Add(_bs);
+                if (_bs is not null) 
+                {
+                    if (!_seriesNames.Contains(_bs)) 
+                    {
+                        _seriesNames.Add(_bs);
+                    }
+                }
             }
 
             var genres = _db.Genres.ToList();
