@@ -6,29 +6,63 @@
 @section Scripts {
   <script type="text/javascript" src="~/js/tablesorter.js"></script>
   <script>
-    $(function() {
-        $("#bookTable").tablesorter();
-    });
+        $(function() {
+            $("#bookTable").tablesorter();
+        });
+
+        const FilterBookIndexSearch = () => {
+        const columns = [
+        { name: 'Title', index: 0, isFilter: true },
+        { name: 'Author', index: 2, isFilter: true },
+        { name: 'Series', index: 3, isFilter: true },
+        { name: 'ISBN', index: 5, isFilter: true }
+        ]
+        const filterColumns = columns.filter(c => c.isFilter).map(c => c.index)
+        const trs = document.querySelectorAll(`#bookTable tr:not(.header)`)
+        const filter = document.querySelector('#SearchIndexInput').value
+        const regex = new RegExp(escape(filter), 'i')
+        const isFoundInTds = td => regex.test(td.innerHTML)
+        const isFound = childrenArr => childrenArr.some(isFoundInTds)
+        const setTrStyleDisplay = ({ style, children }) => {
+        style.display = isFound([
+            ...filterColumns.map(c => children[c])
+        ]) ? '' : 'none'
+        }
+  
+    trs.forEach(setTrStyleDisplay)
+}
   </script>
 }
     <div id="test" style="width: 50%; float:left">
        <h1 class="text-primary">@ViewData["Title"]</h1>
+        <div>
+            <input class="form-control me-sm-2 mb-2"
+                style="width:80%;"
+                type="text"
+                id="SearchIndexInput"
+                onkeyup="FilterBookIndexSearch()"
+                placeholder="Search by Title, Author, Series or ISBN"
+                title="Search by Title, Author, Series or ISBN">
+
+        </div>
     </div>
     <div class="bookAdd" style="width:50%; float:right; display:flex; justify-content:flex-end;">
         <div class="btn-group" role="group">
-              <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
-          <div class="btn-group" role="group">
+            <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
+            <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-              <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                    <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
+                </div>
             </div>
-          </div>
         </div>
     </div>
+    
+    
 <div class="search-table-outter">
     <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%">
         <thead>
-            <tr class="table-secondary">
+            <tr class="table-secondary header">
                 <th>
                     Title
                 </th>
