@@ -123,7 +123,7 @@
 
           <label asp-for="book.Rating"></label>
           <span asp-validation-for="book.Rating" class="text-danger"></span>
-          <input asp-for="book.Rating" type="number" class="form-control">
+          <input asp-for="book.Rating" type="text" class="form-control">
 
           <label for="book.isAnnotated">Annotated?</label>
           <span asp-validation-for="book.isAnnotated" class="text-danger"></span>
@@ -144,7 +144,6 @@
           <label for="book.isFavorite">Favorite?</label>
           <span asp-validation-for="book.isFavorite" class="text-danger"></span>
           <input id="book.isFavorite" asp-for="book.isFavorite" class="form-check-input" type="checkbox" rows="1">
-          
 
           <input id="CoverLink" style="display:none;" asp-for="book.CoverLink" placeholder="@Model.book.CoverLink" />
           <input id="BookId" style="display:none;" asp-for="book.Id" placeholder="@Model.book.Id" />
