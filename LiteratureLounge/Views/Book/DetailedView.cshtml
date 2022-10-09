@@ -4,6 +4,7 @@
     ViewData["Title"] = @Model.book.Title;
     var ISBN = @Model.book.ISBN;
 }
+
 <h1 style="display:inline;">
     @if (!Model.book.isFavorite)
     {
@@ -29,7 +30,6 @@
         <div>
             @Model.book.Publisher
         </div>
-        
         
         <div>
             @foreach(var _genre in Model.book.BookGenres)
@@ -64,7 +64,6 @@
                         <a asp-action="Rating" asp-route-rating=@(i+1) asp-route-id=@Model.book.Id><i class="img-fill bi bi-cup-hot-fill"></i></a>
                         <i class="img-blank bi bi-cup-hot"></i>
                     </div>
-                    
                 }
             }
             (@Model.book.Rating)
@@ -100,7 +99,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.book.ReadStatus)
-            
         </dd>
         @if (Model.book.ReadStatus is not null && Model.book.ReadStatus != "Unread")
         {

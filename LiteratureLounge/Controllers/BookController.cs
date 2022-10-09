@@ -171,6 +171,12 @@ namespace LiteratureLounge.Controllers
                 model.book.BookGenres.Add(bg);
             }
 
+            if (model.book.Title is null) 
+            {
+                TempData["Error"] = $"Edit Failed! Book title must contain a value!";
+                return RedirectToAction("Edit", new { model.book.Id });
+            }
+
             _db.Books.Update(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
@@ -269,11 +275,9 @@ namespace LiteratureLounge.Controllers
                 _db.Update(dbBook);
                 _db.SaveChanges();
 
-                // Toastr Alert and Redirect
                 TempData["Success"] = $"Uploaded New Cover Image Successfully!";
                 return RedirectToAction("DetailedView", new { id });
             }
-            // Toastr Alert and Redirect
             TempData["Error"] = $"No File Detected For Upload!";
             return RedirectToAction("DetailedView", new { id });
         }
