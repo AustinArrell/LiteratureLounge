@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace LiteratureLounge.Models
 {
@@ -7,11 +8,10 @@ namespace LiteratureLounge.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string? Title { get; set; }
+        public string Title { get; set; }
         public string? Subtitle { get; set; }
         [Required]
-        public string? Author { get; set; }
-        [Required]
+        public string Author { get; set; }
         public string? ISBN { get; set; }
         public string? Publisher { get; set; }
         public string? Description { get; set; }
