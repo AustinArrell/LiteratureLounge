@@ -24,7 +24,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Book> books = _db.Books.ToList();
+            IEnumerable<Book> books = _db.Books.ToList().OrderBy(b => b.Title);
             return View(books);
         }
 
