@@ -117,6 +117,10 @@
             <option>Signature Plate</option>
           </select>
 
+            <label asp-for="book.Owner"></label>
+            <span asp-validation-for="book.Owner" class="text-danger"></span>
+            <input asp-for="book.Owner" type="text" class="form-control">
+
           <label asp-for="book.CheckedOutTo">Checked Out To</label>
           <span asp-validation-for="book.CheckedOutTo" class="text-danger"></span>
           <input asp-for="book.CheckedOutTo" type="text" class="form-control">
