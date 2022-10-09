@@ -176,6 +176,11 @@ namespace LiteratureLounge.Controllers
                 TempData["Error"] = $"Edit Failed! Book title must contain a value!";
                 return RedirectToAction("Edit", new { model.book.Id });
             }
+            if (model.book.Author is null)
+            {
+                TempData["Error"] = $"Edit Failed! Book author must contain a value!";
+                return RedirectToAction("Edit", new { model.book.Id });
+            }
 
             _db.Books.Update(model.book);
             _db.SaveChanges();
