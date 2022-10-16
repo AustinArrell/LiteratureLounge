@@ -28,8 +28,7 @@ public class AccountController : Controller
         return View(new
         {
             Name = User.Identity.Name,
-            UserId = User.Claims
-            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
+            UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
         });
     }
 

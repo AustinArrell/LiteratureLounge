@@ -27,7 +27,8 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            IEnumerable<Book> books = _db.Books.ToList().OrderBy(b => b.Title);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            IEnumerable<Book> books = _db.Books.Where(b => b.Owner == userId).ToList().OrderBy(b => b.Title);
             return View(books);
         }
 
