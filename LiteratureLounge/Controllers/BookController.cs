@@ -140,7 +140,7 @@ namespace LiteratureLounge.Controllers
 
             if (_book == null)
             {
-                TempData["Error"] = $"Failed to find book to edit!";
+                TempData["Error"] = $"Edit Failed! Cannot find book to edit!";
                 return RedirectToAction("Index");
             }
 
@@ -180,7 +180,7 @@ namespace LiteratureLounge.Controllers
             // Block attempts to edit books not owned by current user
             if (model.book.Owner != userId) 
             {
-                TempData["Error"] = $"Edit Failed! Cannot find book to edit";
+                TempData["Error"] = $"Edit Failed! Cannot find book to edit!";
                 return RedirectToAction("Index");
             }
             if (model.book.Title is null)
@@ -228,7 +228,7 @@ namespace LiteratureLounge.Controllers
             var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
-                TempData["Error"] = $"Edit Failed! Cannot find book to edit";
+                TempData["Error"] = $"Edit Failed! Cannot find book to edit!";
                 return RedirectToAction("Index");
             }
             book.Rating = rating;
@@ -240,13 +240,16 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult DetailedView(int? id)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var book = _db.Books
+                .Where(b => b.Owner == userId)
                 .Include(book => book.BookGenres)
                 .ThenInclude(bg => bg.Genre)
                 .FirstOrDefault(c => c.Id == id);
 
             if (book == null)
             {
+                TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
             }
 
