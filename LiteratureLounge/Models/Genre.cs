@@ -8,6 +8,7 @@ namespace LiteratureLounge.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Owner { get; set; }
         public ICollection<BookGenre> BookGenres { get; set; }
     }
 }
