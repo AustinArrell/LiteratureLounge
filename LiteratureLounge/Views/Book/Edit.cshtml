@@ -16,6 +16,8 @@
       <fieldset class="border p-3 mt-2">
         <h1 class="text-primary">Edit Book</h1>
         <div>
+            <input style="display:none" asp-for="book.Owner" type="text" class="form-control">
+
             <label asp-for="book.Title"></label>
             <span asp-validation-for="book.Title" class="text-danger"></span>
             <input asp-for="book.Title" type="text" class="form-control">

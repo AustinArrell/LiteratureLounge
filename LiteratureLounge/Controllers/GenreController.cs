@@ -78,13 +78,11 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Genre genre)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var _genre = _db.Genres.Where(g=> g.Owner == userId).FirstOrDefault(g => g.Id == genre.Id);
-            if (_genre is not null)
+            if (genre is not null)
             {
-                _db.Genres.Remove(_genre);
+                _db.Genres.Remove(genre);
                 _db.SaveChanges();
-                TempData["Success"] = $"Deleted Genre {_genre.Name} Successfully";
+                TempData["Success"] = $"Deleted Genre {genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
             TempData["Error"] = "Failed to Delete Genre - Genre Null";
@@ -110,8 +108,7 @@ namespace LiteratureLounge.Controllers
         public IActionResult Edit(Genre genre)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var _genre = _db.Genres.Where(g => g.Owner == userId).AsNoTracking().FirstOrDefault(g => g.Id == genre.Id);
-            if (_genre is not null) 
+            if (genre is not null) 
             {
                 genre.Owner = userId;
                 _db.Genres.Update(genre);
