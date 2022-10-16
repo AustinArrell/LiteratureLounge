@@ -87,9 +87,9 @@
           <label asp-for="book.ReadStatus"></label>
           <span asp-validation-for="book.ReadStatus" class="text-danger"></span>
           <select asp-for="book.ReadStatus" class="form-select">
+              <option>Unread</option>
               <option>Read</option>
               <option>Re-Read</option>
-              <option>Unread</option>
           </select>
 
           <label asp-for="book.MediaType"></label>

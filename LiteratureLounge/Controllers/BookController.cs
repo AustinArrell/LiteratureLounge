@@ -176,13 +176,15 @@ namespace LiteratureLounge.Controllers
         public IActionResult Edit(BookEditViewModel model)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var _book = _db.Books.Where(b => b.Id == model.book.Id).AsNoTracking().ToList().FirstOrDefault();
 
-            // Block attempts to edit books not owned by current user
-            if (model.book.Owner != userId) 
+            if (_book.Owner != userId)
             {
-                TempData["Error"] = $"Edit Failed! Cannot find book to edit!";
+                TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
             }
+
+            model.book.Owner = _book.Owner;
             if (model.book.Title is null)
             {
                 TempData["Error"] = $"Edit Failed! Book title must contain a value!";
