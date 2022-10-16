@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -43,8 +45,21 @@
                           </div>
                         </li>
                     </ul>
+                 @if (!(User.Identity.IsAuthenticated))
+                    {
+                        <a type="button" class="btn btn-primary" asp-controller="Account" asp-action="Login">Login</a>
+                    }
+                    else
+                    {
+                        <a type="button" class="btn btn-primary" asp-controller="Account" asp-action="Profile">My Profile </a>
+                        <a type="button" class="btn btn-primary" asp-controller="Account" asp-action="Logout">Logout</a>
+                    }
+
+                 
                 </div>
-                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+              
+                
+                
             </div>
         </nav>
     </header>
