@@ -3,6 +3,8 @@ using LiteratureLounge.Models;
 using System.Diagnostics;
 using Purrs_And_Prose.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace LiteratureLounge.Controllers
 {
@@ -20,7 +22,8 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            IEnumerable<Genre> genres = _db.Genres.ToList();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            IEnumerable<Genre> genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             return View(genres);
         }
 
@@ -37,7 +40,8 @@ namespace LiteratureLounge.Controllers
         {
             if (genre is not null) 
             {
-                var _genres = _db.Genres.ToList();
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var _genres = _db.Genres.Where(g => g.Owner == userId).ToList();
                 foreach (var _genre in _genres)
                 {
                     if (_genre.Name == genre.Name) 
@@ -46,24 +50,26 @@ namespace LiteratureLounge.Controllers
                         return View();
                     }
                 }
+                genre.Owner = userId;
                 _db.Genres.Add(genre);
                 _db.SaveChanges();
                 TempData["Success"] = "Created Genre Successfully";
                 return RedirectToAction("Index");
             }
-            TempData["Error"] = "Failed to Create Null Genre";
+            TempData["Error"] = "Failed to Create Genre!";
             return View();
         }
 
         [Authorize]
         public IActionResult Delete(int? id)
         {
-            var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var genre = _db.Genres.Where(g => g.Id == id && g.Owner == userId).FirstOrDefault();
             if (genre is not null)
             {
                 return View(genre);
             }
-            TempData["Error"] = "Failed to Find Genre - Genre Null";
+            TempData["Error"] = "Action Failed. Failed to Find Genre!";
             return RedirectToAction("Index");
         }
 
@@ -72,11 +78,13 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Genre genre)
         {
-            if (genre is not null)
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var _genre = _db.Genres.Where(g=> g.Owner == userId).FirstOrDefault(g => g.Id == genre.Id);
+            if (_genre is not null)
             {
-                _db.Genres.Remove(genre);
+                _db.Genres.Remove(_genre);
                 _db.SaveChanges();
-                TempData["Success"] = $"Deleted Genre {genre.Name} Successfully";
+                TempData["Success"] = $"Deleted Genre {_genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
             TempData["Error"] = "Failed to Delete Genre - Genre Null";
@@ -86,12 +94,13 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Edit(int? id)
         {
-            var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var genre = _db.Genres.Where(g => g.Id == id && g.Owner == userId).FirstOrDefault();
             if (genre is not null)
             {
                 return View(genre);
             }
-            TempData["Error"] = "Failed to Edit Genre - Genre Null";
+            TempData["Error"] = "Failed to Edit Genre!";
             return RedirectToAction("Index");
         }
 
@@ -100,14 +109,17 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Edit(Genre genre)
         {
-            if (genre is not null) 
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var _genre = _db.Genres.Where(g => g.Owner == userId).AsNoTracking().FirstOrDefault(g => g.Id == genre.Id);
+            if (_genre is not null) 
             {
+                genre.Owner = userId;
                 _db.Genres.Update(genre);
                 _db.SaveChanges();
                 TempData["Success"] = $"Edited Genre {genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
-            TempData["Error"] = "Failed to Edit Genre - Genre Null";
+            TempData["Error"] = "Failed to Edit Genre!";
             return RedirectToAction("Index");
         }
 

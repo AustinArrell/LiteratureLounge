@@ -9,6 +9,7 @@
       <fieldset class="border p-3 mt-2">
         <h1 class="text-primary">Edit Genre</h1>
         <div>
+            <input style="display:none" asp-for="Id" type="text" class="form-control">
           <label asp-for="Name"></label>
           <span asp-validation-for="Name" class="text-danger"></span>
           <input asp-for="Name" type="text" class="form-control">
