@@ -5,6 +5,7 @@ using Purrs_And_Prose.Data;
 using System.Diagnostics;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LiteratureLounge.Controllers
 {
@@ -35,6 +36,7 @@ namespace LiteratureLounge.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult Create(BookEditViewModel model)
         {
@@ -52,7 +54,7 @@ namespace LiteratureLounge.Controllers
                     return RedirectToAction("Create");
                 }
             }
-
+            
             foreach (var genre in model.genreNames)
             {
                 var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();

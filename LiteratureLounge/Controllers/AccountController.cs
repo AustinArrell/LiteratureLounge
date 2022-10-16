@@ -21,17 +21,15 @@ public class AccountController : Controller
           authenticationProperties
         );
     }
-
+     
     [Authorize]
     public IActionResult Profile()
     {
         return View(new
         {
             Name = User.Identity.Name,
-            EmailAddress = User.Claims
-            .FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value,
-            ProfileImage = User.Claims
-            .FirstOrDefault(c => c.Type == "picture")?.Value
+            UserId = User.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
         });
     }
 
