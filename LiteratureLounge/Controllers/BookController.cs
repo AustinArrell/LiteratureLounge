@@ -35,7 +35,8 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            var genres = _db.Genres.ToList();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             return View(new BookEditViewModel {Genres = genres });
         }
 
@@ -49,7 +50,10 @@ namespace LiteratureLounge.Controllers
             if (model.book.Rating < 0)
                 model.book.Rating = 0;
 
-            var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            model.book.Owner = userId;
+            var ISBNs = _db.Books.Where(b=> b.Owner == userId).Select(b => b.ISBN).ToList();
             foreach (var _isbn in ISBNs) 
             {
                 if (_isbn == model.book.ISBN) 
@@ -61,14 +65,11 @@ namespace LiteratureLounge.Controllers
             
             foreach (var genre in model.genreNames)
             {
-                var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();
+                var _genre = _db.Genres.Where(g => g.Owner == userId).Where(g => g.Name == genre).FirstOrDefault();
                 var bg = new BookGenre { Genre = _genre };
                 model.book.BookGenres.Add(bg);
             }
-
-            model.book.Owner = User.Claims
-            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
+            
             _db.Books.Add(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Added book successfully!";
@@ -90,9 +91,11 @@ namespace LiteratureLounge.Controllers
             {
                 viewModel.ISBN = CleanISBN(viewModel.ISBN);
                 Book book = await booklookup.LookupBookDetails(viewModel.ISBN);
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 
+                book.Owner = userId;
                 book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
-                var ISBNs = _db.Books.Select(c => c.ISBN).ToList();
+                var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(c => c.ISBN).ToList();
                 foreach (var _isbn in ISBNs)
                 {
                     if (_isbn == book.ISBN)
@@ -128,23 +131,29 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Edit(int? id)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var _book = _db.Books
+                .Where(b => b.Owner == userId)
                 .Include(book => book.BookGenres)
                 .ThenInclude(bg => bg.Genre)
                 .FirstOrDefault(c => c.Id == id);
+
             if (_book == null)
             {
+                TempData["Error"] = $"Failed to find book to edit!";
                 return RedirectToAction("Index");
             }
 
+            // Populate BookGenres currently attached to Book
             var _genreNames = new List<string>();
             foreach (var _bg in _book.BookGenres) 
             {
                 _genreNames.Add(_bg.Genre.Name);
             }
 
+            // Populate dropdown for series names
             var _seriesNames = new List<string>();
-            foreach (var _bs in _db.Books.Select(row => row.Series).ToArray()) 
+            foreach (var _bs in _db.Books.Where(b => b.Owner == userId).Select(row => row.Series).ToArray()) 
             {
                 if (_bs is not null) 
                 {
@@ -155,7 +164,7 @@ namespace LiteratureLounge.Controllers
                 }
             }
 
-            var genres = _db.Genres.ToList();
+            var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames, SeriesNames = _seriesNames};
             return View(model);
         }
@@ -165,6 +174,7 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Edit(BookEditViewModel model)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (model.book.Rating > 5)
                 model.book.Rating = 5;
             if (model.book.Rating < 0)
