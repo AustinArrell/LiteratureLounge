@@ -5,8 +5,10 @@
 <div style=" display:flex; justify-content:center;">
     <form method="post" style="width: 50%">
       <fieldset class="border p-3 mt-2">
-        <h1 class="text-primary">Create Book</h1>
+        <h1 class="text-primary">Delete Book</h1>
         <div>
+          <input style="display:none" asp-for="Id" type="text" class="form-control">
+
           <label asp-for="Title"></label>
           <input asp-for="Title" disabled="" type="text" class="form-control">
 

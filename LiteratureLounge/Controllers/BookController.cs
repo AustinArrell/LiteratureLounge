@@ -283,7 +283,7 @@ namespace LiteratureLounge.Controllers
                 TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
             }
-            return View(book);
+            return View(book );
         }
 
         [HttpPost]
@@ -292,7 +292,9 @@ namespace LiteratureLounge.Controllers
         public IActionResult Delete(Book book)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (book.Owner != userId) 
+            var _book = _db.Books.Where(b => b.Id == book.Id).AsNoTracking().ToList().FirstOrDefault();
+
+            if (_book.Owner != userId) 
             {
                 TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
@@ -307,7 +309,8 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Upload(BookDetailedViewModel model, string isbn, int id)
         {
-            var dbBook = _db.Books.Where(b => b.Id == id).FirstOrDefault();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var dbBook = _db.Books.Where(b => b.Id == id && b.Owner == userId).FirstOrDefault();
             if (model.file is not null && dbBook is not null)
             {
                 // Validate file extension
@@ -320,7 +323,7 @@ namespace LiteratureLounge.Controllers
                 // Setup File Paths
                 var filePathTail = $"{model.file.FileName.Split(".").First()}.jpg";
                 var rootPath = hostingEnvironment.WebRootPath;
-                var imagePath = Path.Combine(rootPath, $"Images\\Covers\\{filePathTail}");
+                var imagePath = Path.Combine(rootPath, $"Images\\Covers\\{userId.Replace("|","")}{filePathTail}");
 
                 // Save Image
                 using (var fs = new FileStream(imagePath, FileMode.Create))
@@ -329,14 +332,14 @@ namespace LiteratureLounge.Controllers
                 }
 
                 // Update Book Image
-                dbBook.CoverLink = Path.Combine(@"/Images/Covers/", filePathTail);
+                dbBook.CoverLink = Path.Combine(@"/Images/Covers/", userId.Replace("|", "") + filePathTail);
                 _db.Update(dbBook);
                 _db.SaveChanges();
 
                 TempData["Success"] = $"Uploaded New Cover Image Successfully!";
                 return RedirectToAction("DetailedView", new { id });
             }
-            TempData["Error"] = $"No File Detected For Upload!";
+            TempData["Error"] = $"File upload failed!";
             return RedirectToAction("DetailedView", new { id });
         }
 
