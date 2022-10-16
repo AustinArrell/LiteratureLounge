@@ -285,7 +285,7 @@ namespace LiteratureLounge.Controllers
                 TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
             }
-            return View(book );
+            return View(book);
         }
 
         [HttpPost]
@@ -293,14 +293,6 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Book book)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var _book = _db.Books.Where(b => b.Id == book.Id).AsNoTracking().ToList().FirstOrDefault();
-
-            if (_book.Owner != userId) 
-            {
-                TempData["Error"] = $"Action Failed! Cannot find book!";
-                return RedirectToAction("Index");
-            }
             _db.Remove(book);
             _db.SaveChanges();
             TempData["Success"] = $"Removed book successfully!";
