@@ -23,7 +23,8 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var Books = _db.Books.ToList();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var Books = _db.Books.Where(b => b.Owner == userId).ToList();
             return View(new HomeIndexViewModel {Books = Books });
         }
 
