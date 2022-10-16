@@ -261,9 +261,11 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult EditCoverImage(int? id)
         {
-            var book = _db.Books.FirstOrDefault(c => c.Id == id);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
+                TempData["Error"] = $"Action Failed! Cannot find book!";
                 return RedirectToAction("Index");
             }
             BookDetailedViewModel viewModel = new BookDetailedViewModel();
