@@ -151,7 +151,7 @@ namespace LiteratureLounge.Controllers
                 _genreNames.Add(_bg.Genre.Name);
             }
 
-            // Populate dropdown for series names
+            // Populate dropdown for series names from existing books
             var _seriesNames = new List<string>();
             foreach (var _bs in _db.Books.Where(b => b.Owner == userId).Select(row => row.Series).ToArray()) 
             {
@@ -164,6 +164,7 @@ namespace LiteratureLounge.Controllers
                 }
             }
 
+            // Populate genre list dropdown from database
             var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames, SeriesNames = _seriesNames};
             return View(model);
@@ -175,11 +176,30 @@ namespace LiteratureLounge.Controllers
         public IActionResult Edit(BookEditViewModel model)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            // Block attempts to edit books not owned by current user
+            if (model.book.Owner != userId) 
+            {
+                TempData["Error"] = $"Edit Failed! Cannot find book to edit";
+                return RedirectToAction("Index");
+            }
+            if (model.book.Title is null)
+            {
+                TempData["Error"] = $"Edit Failed! Book title must contain a value!";
+                return RedirectToAction("Edit", new { model.book.Id });
+            }
+            if (model.book.Author is null)
+            {
+                TempData["Error"] = $"Edit Failed! Book author must contain a value!";
+                return RedirectToAction("Edit", new { model.book.Id });
+            }
+
             if (model.book.Rating > 5)
                 model.book.Rating = 5;
             if (model.book.Rating < 0)
                 model.book.Rating = 0;
 
+            // If old genres are not removed then they would just keep stacking on edit
             var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
             foreach (var genre in oldGenres) 
             {
@@ -194,17 +214,6 @@ namespace LiteratureLounge.Controllers
                 model.book.BookGenres.Add(bg);
             }
 
-            if (model.book.Title is null) 
-            {
-                TempData["Error"] = $"Edit Failed! Book title must contain a value!";
-                return RedirectToAction("Edit", new { model.book.Id });
-            }
-            if (model.book.Author is null)
-            {
-                TempData["Error"] = $"Edit Failed! Book author must contain a value!";
-                return RedirectToAction("Edit", new { model.book.Id });
-            }
-
             _db.Books.Update(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
@@ -214,9 +223,12 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Rating(int? rating, int? id)
         {
-            var book = _db.Books.FirstOrDefault(c => c.Id == id);
+            // Block attempts to edit books not owned by current user
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
+                TempData["Error"] = $"Edit Failed! Cannot find book to edit";
                 return RedirectToAction("Index");
             }
             book.Rating = rating;
