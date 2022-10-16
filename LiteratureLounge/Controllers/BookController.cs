@@ -291,6 +291,12 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Book book)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (book.Owner != userId) 
+            {
+                TempData["Error"] = $"Action Failed! Cannot find book!";
+                return RedirectToAction("Index");
+            }
             _db.Remove(book);
             _db.SaveChanges();
             TempData["Success"] = $"Removed book successfully!";
