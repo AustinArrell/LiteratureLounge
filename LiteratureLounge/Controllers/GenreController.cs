@@ -2,6 +2,7 @@
 using LiteratureLounge.Models;
 using System.Diagnostics;
 using Purrs_And_Prose.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LiteratureLounge.Controllers
 {
@@ -16,12 +17,14 @@ namespace LiteratureLounge.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             IEnumerable<Genre> genres = _db.Genres.ToList();
             return View(genres);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -29,6 +32,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create(Genre genre)
         {
             if (genre is not null) 
@@ -51,6 +55,7 @@ namespace LiteratureLounge.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Delete(int? id)
         {
             var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
@@ -64,6 +69,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Delete(Genre genre)
         {
             if (genre is not null)
@@ -77,6 +83,7 @@ namespace LiteratureLounge.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public IActionResult Edit(int? id)
         {
             var genre = _db.Genres.Where(g => g.Id == id).FirstOrDefault();
@@ -90,6 +97,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(Genre genre)
         {
             if (genre is not null) 

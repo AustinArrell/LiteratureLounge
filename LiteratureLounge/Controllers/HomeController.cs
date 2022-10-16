@@ -20,6 +20,7 @@ namespace LiteratureLounge.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             var Books = _db.Books.ToList();

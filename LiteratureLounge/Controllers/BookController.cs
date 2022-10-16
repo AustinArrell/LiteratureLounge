@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace LiteratureLounge.Controllers
 {
@@ -23,12 +24,14 @@ namespace LiteratureLounge.Controllers
             hostingEnvironment = enviornment;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             IEnumerable<Book> books = _db.Books.ToList().OrderBy(b => b.Title);
             return View(books);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var genres = _db.Genres.ToList();
@@ -62,12 +65,16 @@ namespace LiteratureLounge.Controllers
                 model.book.BookGenres.Add(bg);
             }
 
+            model.book.Owner = User.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
             _db.Books.Add(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Added book successfully!";
             return RedirectToAction("DetailedView", new { model.book.Id });
         }
 
+        [Authorize]
         public IActionResult CreateFromISBN()
         {
             return View();
@@ -75,6 +82,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> CreateFromISBN(ISBNBookCreateViewModel viewModel)
         {
             try
@@ -116,6 +124,7 @@ namespace LiteratureLounge.Controllers
         }
 
         // UPDATE
+        [Authorize]
         public IActionResult Edit(int? id)
         {
             var _book = _db.Books
@@ -152,6 +161,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(BookEditViewModel model)
         {
             if (model.book.Rating > 5)
@@ -190,6 +200,7 @@ namespace LiteratureLounge.Controllers
             return RedirectToAction("DetailedView", new { model.book.Id });
         }
 
+        [Authorize]
         public IActionResult Rating(int? rating, int? id)
         {
             var book = _db.Books.FirstOrDefault(c => c.Id == id);
@@ -203,6 +214,7 @@ namespace LiteratureLounge.Controllers
             return RedirectToAction("DetailedView", new { book.Id });
         }
 
+        [Authorize]
         public IActionResult DetailedView(int? id)
         {
             var book = _db.Books
@@ -220,6 +232,7 @@ namespace LiteratureLounge.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult EditCoverImage(int? id)
         {
             var book = _db.Books.FirstOrDefault(c => c.Id == id);
@@ -232,6 +245,7 @@ namespace LiteratureLounge.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult Delete(int? id)
         {
             var book = _db.Books.FirstOrDefault(c => c.Id == id);
@@ -245,6 +259,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Delete(Book book)
         {
             _db.Remove(book);
@@ -254,6 +269,7 @@ namespace LiteratureLounge.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Upload(BookDetailedViewModel model, string isbn, int id)
         {
             var dbBook = _db.Books.Where(b => b.Id == id).FirstOrDefault();
