@@ -76,9 +76,8 @@ namespace LiteratureLounge.Tools
                     book.Publisher = (string)bookData["volumeInfo"]["publisher"];
                 if (bookData["volumeInfo"]["pageCount"] is not null)
                     book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
-                if (bookData["volumeInfo"]["imageLinks"]["thumbnail"] is not null)
+                if (bookData["volumeInfo"] is not null)
                 {
-
                     string id = (string)bookData["id"];
                     string link = @$"https://books.google.com/books/publisher/content/images/frontcover/{id}?fife=w300-h600&source=gbs_api";
                     book.CoverLink = link;
