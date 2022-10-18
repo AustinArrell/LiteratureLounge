@@ -21,6 +21,7 @@ namespace LiteratureLounge.Models
         public string? Notes { get; set; } = "";
         public string? Series { get; set; }
         public string? ReadDate { get; set; }
+        public string? CatalogDate { get; set; }
         public string? ChapterLength { get; set; } = "Medium";
         public bool isStamped { get; set; } = false;
         public bool isAnnotated { get; set; } = false;
