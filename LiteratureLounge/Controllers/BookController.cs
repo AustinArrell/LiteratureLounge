@@ -7,6 +7,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using LanguageExt.TypeClasses;
 
 namespace LiteratureLounge.Controllers
 {
@@ -87,14 +88,13 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public async Task<IActionResult> CreateFromISBN(ISBNBookCreateViewModel viewModel)
         {
-            try
+            viewModel.ISBN = CleanISBN(viewModel.ISBN);
+            var result = await booklookup.LookupBookDetails(viewModel.ISBN);
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            
+            return result.Match(book =>
             {
-                viewModel.ISBN = CleanISBN(viewModel.ISBN);
-                Book book = await booklookup.LookupBookDetails(viewModel.ISBN);
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                
                 book.Owner = userId;
-                //book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
                 var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(c => c.ISBN).ToList();
                 foreach (var _isbn in ISBNs)
                 {
@@ -104,19 +104,15 @@ namespace LiteratureLounge.Controllers
                         return RedirectToAction("CreateFromISBN");
                     }
                 }
-
                 _db.Books.Add(book);
                 _db.SaveChanges();
                 TempData["Success"] = $"Added book successfully!";
-                return RedirectToAction("Edit", new { book.Id });
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                TempData["Error"] = e.Message;
-            }
-            return RedirectToAction("CreateFromISBN");
+                return RedirectToAction("Edit", new { Id = book.Id });
 
+            }, exception => {
+                TempData["Error"] = exception.Message;
+                return RedirectToAction("CreateFromISBN");
+            });
         }
 
         private string CleanISBN(string isbn)

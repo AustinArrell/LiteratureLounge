@@ -3,6 +3,8 @@ using Newtonsoft.Json.Linq;
 using LiteratureLounge.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using LanguageExt.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace LiteratureLounge.Tools
 {
@@ -10,13 +12,19 @@ namespace LiteratureLounge.Tools
     {
         static readonly HttpClient client = new HttpClient();
 
-        public async Task<Book> LookupBookDetails(string isbn) 
+        public async Task<Result<Book>> LookupBookDetails(string isbn) 
         {
             string responseBody = await RequestBookDetails(isbn);
             JToken bookData = ParseJsonResponse(responseBody, isbn);
-            return BuildNewBook(isbn, bookData);
-        }
+            var book = BuildNewBook(isbn, bookData);
 
+            if (book.Title is null) 
+            {
+                var validationException = new ValidationException("Book/ISBN not found");
+                return new Result<Book>(validationException);
+            }
+            return book;
+        }
 
         private async Task<string> RequestBookDetails(string isbn) 
         {
@@ -71,7 +79,7 @@ namespace LiteratureLounge.Tools
                 if (bookData["volumeInfo"]["imageLinks"]["thumbnail"] is not null)
                 {
                     string link = (string)bookData["volumeInfo"]["imageLinks"]["thumbnail"];
-                    book.CoverLink = link.Replace("img=1&zoom=1", "img=1&zoom=10");
+                    book.CoverLink = link.Replace("img=1&zoom=1", "img=1&zoom=1");
                 }
             }
             return book;
