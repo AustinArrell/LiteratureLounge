@@ -78,8 +78,10 @@ namespace LiteratureLounge.Tools
                     book.PageCount = (int)bookData["volumeInfo"]["pageCount"];
                 if (bookData["volumeInfo"]["imageLinks"]["thumbnail"] is not null)
                 {
-                    string link = (string)bookData["volumeInfo"]["imageLinks"]["thumbnail"];
-                    book.CoverLink = link.Replace("img=1&zoom=1", "img=1&zoom=1");
+
+                    string id = (string)bookData["id"];
+                    string link = @$"https://books.google.com/books/publisher/content/images/frontcover/{id}?fife=w300-h600&source=gbs_api";
+                    book.CoverLink = link;
                 }
             }
             return book;
