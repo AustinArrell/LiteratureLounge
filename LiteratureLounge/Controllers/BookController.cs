@@ -288,7 +288,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Upload(BookDetailedViewModel model, string isbn, int id)
+        public async Task<IActionResult> Upload(BookDetailedViewModel model, string isbn, int id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var dbBook = _db.Books.Where(b => b.Id == id && b.Owner == userId).FirstOrDefault();
@@ -309,7 +309,7 @@ namespace LiteratureLounge.Controllers
                 // Save Image
                 using (var fs = new FileStream(imagePath, FileMode.Create))
                 {
-                    model.file.CopyTo(fs);
+                    await model.file.CopyToAsync(fs);
                 }
 
                 // Update Book Image
