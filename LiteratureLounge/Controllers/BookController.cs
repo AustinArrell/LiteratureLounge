@@ -94,7 +94,7 @@ namespace LiteratureLounge.Controllers
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
                 
                 book.Owner = userId;
-                book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
+                //book.CoverLink = Path.Combine(@"/Images/Covers/", $"{book.ISBN}.jpg");
                 var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(c => c.ISBN).ToList();
                 foreach (var _isbn in ISBNs)
                 {
@@ -116,6 +116,7 @@ namespace LiteratureLounge.Controllers
                 TempData["Error"] = e.Message;
             }
             return RedirectToAction("CreateFromISBN");
+
         }
 
         private string CleanISBN(string isbn)
