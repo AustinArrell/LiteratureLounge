@@ -70,8 +70,9 @@
             <input asp-for="book.PageCount" type="number" class="form-control">
           
           <div >
-              <label asp-for="genreName">Genres</label>
+              <label asp-for="genreName">Genres</label><a><i style="float:right" class="bi bi-plus-circle"></i></a>
                 <select multiple class="multiple-select-list form-control" asp-for="genreNames">
+                
                 <option value=""></option>
                 @foreach(var _genre in Model.Genres)
                 {
@@ -83,7 +84,8 @@
                         <option>@_genre.Name</option>
                     }
                 }
-              </select>
+                
+              </select >
           </div>
 
           <label asp-for="book.ChapterLength"></label>
