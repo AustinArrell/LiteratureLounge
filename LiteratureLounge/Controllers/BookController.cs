@@ -54,6 +54,7 @@ namespace LiteratureLounge.Controllers
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             model.book.Owner = userId;
+            model.book.CatalogDate = DateTime.Today.ToString();
             var ISBNs = _db.Books.Where(b=> b.Owner == userId).Select(b => b.ISBN).ToList();
             foreach (var _isbn in ISBNs) 
             {

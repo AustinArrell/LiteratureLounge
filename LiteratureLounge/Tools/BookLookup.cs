@@ -59,6 +59,7 @@ namespace LiteratureLounge.Tools
             Book book = new Book();
             if (bookData is not null)
             {
+                book.CatalogDate = DateTime.Today.ToString();
                 book.ISBN = isbn;
                 if (bookData["volumeInfo"]["authors"] is not null)
                     book.Author = (string)bookData["volumeInfo"]["authors"].First;
