@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using LanguageExt.TypeClasses;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LiteratureLounge.Controllers
 {
@@ -38,7 +39,8 @@ namespace LiteratureLounge.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
-            return View(new BookEditViewModel {Genres = genres });
+            MultiSelectList _genreList = new MultiSelectList(genres, nameof(Genre.Id), nameof(Genre.Name));
+            return View(new BookEditViewModel {GenreSelectItems=_genreList});
         }
 
         [HttpPost]
@@ -55,6 +57,7 @@ namespace LiteratureLounge.Controllers
 
             model.book.Owner = userId;
             model.book.CatalogDate = DateTime.Today.ToString();
+
             var ISBNs = _db.Books.Where(b=> b.Owner == userId).Select(b => b.ISBN).ToList();
             foreach (var _isbn in ISBNs) 
             {
@@ -64,14 +67,14 @@ namespace LiteratureLounge.Controllers
                     return RedirectToAction("Create");
                 }
             }
-            
-            foreach (var genre in model.genreNames)
+
+            foreach (var genreId in model.genreIds)
             {
-                var _genre = _db.Genres.Where(g => g.Owner == userId).Where(g => g.Name == genre).FirstOrDefault();
+                var _genre = _db.Genres.Where(g => g.Owner == userId).Where(g => g.Id == genreId).FirstOrDefault();
                 var bg = new BookGenre { Genre = _genre };
                 model.book.BookGenres.Add(bg);
             }
-            
+
             _db.Books.Add(model.book);
             _db.SaveChanges();
             TempData["Success"] = $"Added book successfully!";
@@ -142,13 +145,6 @@ namespace LiteratureLounge.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Populate BookGenres currently attached to Book
-            var _genreNames = new List<string>();
-            foreach (var _bg in _book.BookGenres) 
-            {
-                _genreNames.Add(_bg.Genre.Name);
-            }
-
             // Populate dropdown for series names from existing books
             var _seriesNames = new List<string>();
             foreach (var _bs in _db.Books.Where(b => b.Owner == userId).Select(row => row.Series).ToArray()) 
@@ -162,9 +158,16 @@ namespace LiteratureLounge.Controllers
                 }
             }
 
-            // Populate genre list dropdown from database
+            List<int> currentGenreIds = new List<int>();
+            foreach (var bg in _book.BookGenres) 
+            {
+                currentGenreIds.Add(bg.Genre.Id);
+            }
+
             var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
-            var model = new BookEditViewModel { book = _book, Genres = genres, genreNames = _genreNames, SeriesNames = _seriesNames};
+            MultiSelectList _genreList = new MultiSelectList(genres, nameof(Genre.Id), nameof(Genre.Name), currentGenreIds);
+
+            var model = new BookEditViewModel { book = _book, genreIds = currentGenreIds, GenreSelectItems = _genreList, SeriesNames = _seriesNames};
             return View(model);
         }
 
@@ -197,10 +200,10 @@ namespace LiteratureLounge.Controllers
             }
             _db.SaveChanges();
 
-            foreach (var genre in model.genreNames) 
+            foreach (var genre in model.genreIds)
             {
-                var _genre = _db.Genres.Where(g => g.Name == genre).FirstOrDefault();
-                var bg = new BookGenre { Genre = _genre};
+                var _genre = _db.Genres.Where(g => g.Id == genre).FirstOrDefault();
+                var bg = new BookGenre { Genre = _genre };
                 model.book.BookGenres.Add(bg);
             }
 

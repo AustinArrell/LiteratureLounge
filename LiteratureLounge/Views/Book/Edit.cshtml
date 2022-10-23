@@ -70,22 +70,8 @@
             <input asp-for="book.PageCount" type="number" class="form-control">
           
           <div >
-              <label asp-for="genreName">Genres</label><a><i style="float:right" class="bi bi-plus-circle"></i></a>
-                <select multiple class="multiple-select-list form-control" asp-for="genreNames">
-                
-                <option value=""></option>
-                @foreach(var _genre in Model.Genres)
-                {
-                    if (Model.genreNames.Contains(_genre.Name))
-                    {
-                        <option selected="selected">@_genre.Name</option>
-                    }else
-                    {
-                        <option>@_genre.Name</option>
-                    }
-                }
-                
-              </select >
+              <label>Genres</label><a><i style="float:right" class="bi bi-plus-circle"></i></a>
+              @Html.ListBoxFor(model => model.genreIds,Model.GenreSelectItems, new{@class = "multiple-select-list"})
           </div>
 
           <label asp-for="book.ChapterLength"></label>
