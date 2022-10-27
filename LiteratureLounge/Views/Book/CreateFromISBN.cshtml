@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Create Book";
 }
+@section Scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
 <div style=" display:flex; justify-content:center;">
     <form method="post" style="width: 50%">
       <fieldset class="border p-3 mt-2">
@@ -9,6 +14,7 @@
         <div>
           
           <label asp-for="ISBN">ISBN Lookup</label>
+          <span asp-validation-for="ISBN" class="text-danger"></span> 
           <input asp-for="ISBN" type="text" class="form-control" autofocus="autofocus" rows="1">
 
         </div>

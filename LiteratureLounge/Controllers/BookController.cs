@@ -99,31 +99,40 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public async Task<IActionResult> CreateFromISBN(ISBNBookCreateViewModel viewModel)
         {
-            viewModel.ISBN = CleanISBN(viewModel.ISBN);
-            var result = await booklookup.LookupBookDetails(viewModel.ISBN);
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            
-            return result.Match(book =>
+            if (ModelState.IsValid)
             {
-                book.Owner = userId;
-                var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(c => c.ISBN).ToList();
-                foreach (var _isbn in ISBNs)
-                {
-                    if (_isbn == book.ISBN)
-                    {
-                        TempData["Error"] = $"Book has duplicate ISBN!";
-                        return RedirectToAction("CreateFromISBN");
-                    }
-                }
-                _db.Books.Add(book);
-                _db.SaveChanges();
-                TempData["Success"] = $"Added book successfully!";
-                return RedirectToAction("Edit", new { Id = book.Id });
+                viewModel.ISBN = CleanISBN(viewModel.ISBN);
+                var result = await booklookup.LookupBookDetails(viewModel.ISBN);
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            }, exception => {
-                TempData["Error"] = exception.Message;
+                return result.Match(book =>
+                {
+                    book.Owner = userId;
+                    var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(c => c.ISBN).ToList();
+                    foreach (var _isbn in ISBNs)
+                    {
+                        if (_isbn == book.ISBN)
+                        {
+                            TempData["Error"] = $"Book has duplicate ISBN!";
+                            return RedirectToAction("CreateFromISBN");
+                        }
+                    }
+                    _db.Books.Add(book);
+                    _db.SaveChanges();
+                    TempData["Success"] = $"Added book successfully!";
+                    return RedirectToAction("Edit", new { Id = book.Id });
+
+                }, exception =>
+                {
+                    TempData["Error"] = exception.Message;
+                    return RedirectToAction("CreateFromISBN");
+                });
+
+            }
+            else {
+                TempData["Error"] = "Failed to create book!";
                 return RedirectToAction("CreateFromISBN");
-            });
+            }
         }
 
         private string CleanISBN(string isbn)
