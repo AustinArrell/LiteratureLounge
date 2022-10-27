@@ -37,10 +37,11 @@ namespace LiteratureLounge.Controllers
         [ValidateAntiForgeryToken]
         [Authorize]
         public IActionResult Create(Genre genre)
-        {
-            if (genre is not null) 
+        { 
+            if (ModelState.IsValid) 
             {
                 var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                genre.Owner = userId;
                 var _genres = _db.Genres.Where(g => g.Owner == userId).ToList();
                 foreach (var _genre in _genres)
                 {
@@ -50,7 +51,7 @@ namespace LiteratureLounge.Controllers
                         return View();
                     }
                 }
-                genre.Owner = userId;
+                
                 _db.Genres.Add(genre);
                 _db.SaveChanges();
                 TempData["Success"] = "Created Genre Successfully";
