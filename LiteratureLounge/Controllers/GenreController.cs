@@ -109,8 +109,17 @@ namespace LiteratureLounge.Controllers
         public IActionResult Edit(Genre genre)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (genre is not null) 
+            if (ModelState.IsValid) 
             {
+                var _genres = _db.Genres.Where(g => g.Owner == userId).ToList();
+                foreach (var _genre in _genres)
+                {
+                    if (_genre.Name == genre.Name)
+                    {
+                        TempData["Error"] = "Failed to Create Genre with Duplicate Name";
+                        return RedirectToAction("Index");
+                    }
+                }
                 genre.Owner = userId;
                 _db.Genres.Update(genre);
                 _db.SaveChanges();
