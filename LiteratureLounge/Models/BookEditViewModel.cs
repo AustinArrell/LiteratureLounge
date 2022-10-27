@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace LiteratureLounge.Models
 {
@@ -7,7 +9,6 @@ namespace LiteratureLounge.Models
         public Book book { get; set; }
         public List<string> SeriesNames { get; set; } = new List<string>();
         public List<int> genreIds { get; set; } = new List<int>();
-
-        public MultiSelectList GenreSelectItems { get; set; }
+        public MultiSelectList? GenreSelectItems { get; set; }
     }
 }
