@@ -306,10 +306,24 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Book book)
         {
-            _db.Remove(book);
-            _db.SaveChanges();
-            TempData["Success"] = $"Removed book successfully!";
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (book.Owner != userId) 
+                {
+                    TempData["Error"] = $"Failed to delete book!";
+                    return RedirectToAction("Index");
+                }
+                _db.Remove(book);
+                _db.SaveChanges();
+                TempData["Success"] = $"Removed book successfully!";
+                return RedirectToAction("Index");
+            }
+            else 
+            {
+                TempData["Error"] = $"Failed to delete book!";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
