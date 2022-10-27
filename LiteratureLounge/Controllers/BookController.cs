@@ -48,37 +48,44 @@ namespace LiteratureLounge.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(BookEditViewModel model)
         {
-            if (model.book.Rating > 5)
-                model.book.Rating = 5;
-            if (model.book.Rating < 0)
-                model.book.Rating = 0;
-
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
             model.book.Owner = userId;
             model.book.CatalogDate = DateTime.Today.ToString();
 
-            var ISBNs = _db.Books.Where(b=> b.Owner == userId).Select(b => b.ISBN).ToList();
-            foreach (var _isbn in ISBNs) 
+            if (ModelState.IsValid)
             {
-                if (_isbn == model.book.ISBN) 
+                if (model.book.Rating > 5)
+                    model.book.Rating = 5;
+                if (model.book.Rating < 0)
+                    model.book.Rating = 0;
+
+                var ISBNs = _db.Books.Where(b => b.Owner == userId).Select(b => b.ISBN).ToList();
+                foreach (var _isbn in ISBNs)
                 {
-                    TempData["Error"] = $"Book has duplicate ISBN!";
-                    return RedirectToAction("Create");
+                    if (_isbn == model.book.ISBN)
+                    {
+                        TempData["Error"] = $"Book has duplicate ISBN!";
+                        return RedirectToAction("Create");
+                    }
                 }
-            }
 
-            foreach (var genreId in model.genreIds)
-            {
-                var _genre = _db.Genres.Where(g => g.Owner == userId).Where(g => g.Id == genreId).FirstOrDefault();
-                var bg = new BookGenre { Genre = _genre };
-                model.book.BookGenres.Add(bg);
-            }
+                foreach (var genreId in model.genreIds)
+                {
+                    var _genre = _db.Genres.Where(g => g.Owner == userId).Where(g => g.Id == genreId).FirstOrDefault();
+                    var bg = new BookGenre { Genre = _genre };
+                    model.book.BookGenres.Add(bg);
+                }
 
-            _db.Books.Add(model.book);
-            _db.SaveChanges();
-            TempData["Success"] = $"Added book successfully!";
-            return RedirectToAction("DetailedView", new { model.book.Id });
+                _db.Books.Add(model.book);
+                _db.SaveChanges();
+                TempData["Success"] = $"Added book successfully!";
+                return RedirectToAction("DetailedView", new { model.book.Id });
+            }
+            else {
+                TempData["Error"] = $"Failed to add Book! ";
+                return RedirectToAction("Create");
+            }
         }
 
         [Authorize]
@@ -176,43 +183,49 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Edit(BookEditViewModel model)
         {
-            if (model.book.Title is null)
+            if (ModelState.IsValid)
             {
-                TempData["Error"] = $"Edit Failed! Book title must contain a value!";
+                if (model.book.Rating > 5)
+                    model.book.Rating = 5;
+                if (model.book.Rating < 0)
+                    model.book.Rating = 0;
+
+                // If old genres are not removed then they would just keep stacking on edit
+                var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
+                foreach (var genre in oldGenres)
+                {
+                    _db.BookGenres.Remove(genre);
+                }
+                _db.SaveChanges();
+
+                foreach (var genre in model.genreIds)
+                {
+                    var _genre = _db.Genres.Where(g => g.Id == genre).FirstOrDefault();
+                    var bg = new BookGenre { Genre = _genre };
+                    model.book.BookGenres.Add(bg);
+                }
+
+                _db.Books.Update(model.book);
+                _db.SaveChanges();
+                TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
+                return RedirectToAction("DetailedView", new { model.book.Id });
+            }
+            else 
+            {
+                if (model.book.Title is null)
+                {
+                    TempData["Error"] = $"Edit Failed! Book title must contain a value!";
+                    return RedirectToAction("Edit", new { model.book.Id });
+                }
+                if (model.book.Author is null)
+                {
+                    TempData["Error"] = $"Edit Failed! Book author must contain a value!";
+                    return RedirectToAction("Edit", new { model.book.Id });
+                }
+                TempData["Error"] = $"Edit Failed!";
                 return RedirectToAction("Edit", new { model.book.Id });
             }
-            if (model.book.Author is null)
-            {
-                TempData["Error"] = $"Edit Failed! Book author must contain a value!";
-                return RedirectToAction("Edit", new { model.book.Id });
-            }
-
-            if (model.book.Rating > 5)
-                model.book.Rating = 5;
-            if (model.book.Rating < 0)
-                model.book.Rating = 0;
-
-            // If old genres are not removed then they would just keep stacking on edit
-            var oldGenres = _db.BookGenres.Where(bg => bg.BookId == model.book.Id).ToList();
-            foreach (var genre in oldGenres) 
-            {
-                _db.BookGenres.Remove(genre);
-            }
-            _db.SaveChanges();
-
-            foreach (var genre in model.genreIds)
-            {
-                var _genre = _db.Genres.Where(g => g.Id == genre).FirstOrDefault();
-                var bg = new BookGenre { Genre = _genre };
-                model.book.BookGenres.Add(bg);
-            }
-
-            _db.Books.Update(model.book);
-            _db.SaveChanges();
-            TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
-            return RedirectToAction("DetailedView", new { model.book.Id });
         }
-
         [Authorize]
         public IActionResult Rating(int? rating, int? id)
         {
