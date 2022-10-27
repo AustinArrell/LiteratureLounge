@@ -332,7 +332,7 @@ namespace LiteratureLounge.Controllers
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var dbBook = _db.Books.Where(b => b.Id == id && b.Owner == userId).FirstOrDefault();
-            if (model.file is not null && dbBook is not null)
+            if (model.file is not null && dbBook is not null && ModelState.IsValid)
             {
                 // Validate file extension
                 if (!UploadTools.IsFileTypeValid(model.file.FileName, new string[] { ".jpg", ".png", ".gif", ".webp" }))
