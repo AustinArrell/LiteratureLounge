@@ -10,10 +10,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Journal.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Purrs_and_Prose.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 </head>
 <body>
     <header>
@@ -61,6 +59,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             <partial name="_Notification" />
+            <partial name="_ValidationScriptsPartial" />
+            
             @RenderBody()
         </main>
     </div>

@@ -1,18 +1,17 @@
 ﻿@model BookEditViewModel
 @{
     ViewData["Title"] = "Create Book";
+    
 }
 @section Scripts
 {
-        <script src="~/js/chosen.jquery.js"/>   
-        <script type="text/javascript" src="~/js/JQuery.js"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
- 
-        <script type="text/javascript">
-                $(".multiple-select-list").chosen({ width: '100%' });
-        </script>
+    <link rel="stylesheet" href="~/css/chosen.css" asp-append-version="true" />
+    <script type="text/javascript" src="~/js/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        $(".multiple-select-list").chosen({ width: '100%' });
+    </script>
 }
+
 <div style=" display:flex; justify-content:center;">
     <form method="post"  style="width: 50%">
       <fieldset class="border p-3 mt-2">
