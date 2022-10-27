@@ -46,7 +46,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BookEditViewModel model)
+        public async Task<IActionResult> Create(BookEditViewModel model)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -78,7 +78,7 @@ namespace LiteratureLounge.Controllers
                 }
 
                 _db.Books.Add(model.book);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = $"Added book successfully!";
                 return RedirectToAction("DetailedView", new { model.book.Id });
             }
@@ -190,7 +190,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Edit(BookEditViewModel model)
+        public async Task<IActionResult> Edit(BookEditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -205,7 +205,7 @@ namespace LiteratureLounge.Controllers
                 {
                     _db.BookGenres.Remove(genre);
                 }
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 foreach (var genre in model.genreIds)
                 {
@@ -215,7 +215,7 @@ namespace LiteratureLounge.Controllers
                 }
 
                 _db.Books.Update(model.book);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = $"Edited Book: {model.book.Title} successfully!";
                 return RedirectToAction("DetailedView", new { model.book.Id });
             }
@@ -236,7 +236,7 @@ namespace LiteratureLounge.Controllers
             }
         }
         [Authorize]
-        public IActionResult Rating(int? rating, int? id)
+        public async Task<IActionResult> Rating(int? rating, int? id)
         {
             // Block attempts to edit books not owned by current user
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -248,7 +248,7 @@ namespace LiteratureLounge.Controllers
             }
             book.Rating = rating;
             _db.Update(book);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return RedirectToAction("DetailedView", new { book.Id });
         }
 
@@ -304,7 +304,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Delete(Book book)
+        public async Task<IActionResult> Delete(Book book)
         {
             if (ModelState.IsValid)
             {
@@ -315,7 +315,7 @@ namespace LiteratureLounge.Controllers
                     return RedirectToAction("Index");
                 }
                 _db.Remove(book);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = $"Removed book successfully!";
                 return RedirectToAction("Index");
             }
@@ -355,8 +355,8 @@ namespace LiteratureLounge.Controllers
                 // Update Book Image
                 dbBook.CoverLink = Path.Combine(@"/Images/Covers/", userId.Replace("|", "") + filePathTail);
                 _db.Update(dbBook);
-                _db.SaveChanges();
-
+                await _db.SaveChangesAsync();
+                
                 TempData["Success"] = $"Uploaded New Cover Image Successfully!";
                 return RedirectToAction("DetailedView", new { id });
             }

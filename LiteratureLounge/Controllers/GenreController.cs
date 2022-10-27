@@ -36,7 +36,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Create(Genre genre)
+        public async Task<IActionResult> Create(Genre genre)
         { 
             if (ModelState.IsValid) 
             {
@@ -53,7 +53,7 @@ namespace LiteratureLounge.Controllers
                 }
                 
                 _db.Genres.Add(genre);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = "Created Genre Successfully";
                 return RedirectToAction("Index");
             }
@@ -77,12 +77,12 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Delete(Genre genre)
+        public async Task<IActionResult> Delete(Genre genre)
         {
             if (ModelState.IsValid)
             {
                 _db.Genres.Remove(genre);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = $"Deleted Genre {genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
@@ -106,7 +106,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Edit(Genre genre)
+        public async Task<IActionResult> Edit(Genre genre)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (ModelState.IsValid) 
@@ -122,7 +122,7 @@ namespace LiteratureLounge.Controllers
                 }
                 genre.Owner = userId;
                 _db.Genres.Update(genre);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 TempData["Success"] = $"Edited Genre {genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
