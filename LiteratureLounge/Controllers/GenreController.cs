@@ -79,14 +79,14 @@ namespace LiteratureLounge.Controllers
         [Authorize]
         public IActionResult Delete(Genre genre)
         {
-            if (genre is not null)
+            if (ModelState.IsValid)
             {
                 _db.Genres.Remove(genre);
                 _db.SaveChanges();
                 TempData["Success"] = $"Deleted Genre {genre.Name} Successfully";
                 return RedirectToAction("Index");
             }
-            TempData["Error"] = "Failed to Delete Genre - Genre Null";
+            TempData["Error"] = "Failed to Delete Genre!";
             return RedirectToAction("Index");
         }
 
