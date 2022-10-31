@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using LanguageExt.TypeClasses;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using LiteratureLounge.Controller_Extensions;
 
 namespace LiteratureLounge.Controllers
 {
@@ -27,11 +28,27 @@ namespace LiteratureLounge.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userPrefs = _db.UserPreferences
+                .Where(up => up.UserId == userId)
+                .Include(up => up.UserPreferencesBookIndexColumns)
+                .ThenInclude(upic => upic.IndexColumn)
+                .FirstOrDefault();
+
+            if (userPrefs is null)
+            {
+                await BookControllerExtensions.SetupDefaultUserPrefs(_db, userId);
+                userPrefs = _db.UserPreferences
+                    .Where(up => up.UserId == userId)
+                    .Include(up => up.UserPreferencesBookIndexColumns)
+                    .ThenInclude(upic => upic.IndexColumn)
+                    .FirstOrDefault();
+            }
+                
             IEnumerable<Book> books = _db.Books.Where(b => b.Owner == userId).ToList().OrderBy(b => b.Title);
-            return View(books);
+            return View(new BookIndexViewModel { Books = books, UserPreferencesBookIndexColumns = userPrefs.UserPreferencesBookIndexColumns});
         }
 
         [Authorize]

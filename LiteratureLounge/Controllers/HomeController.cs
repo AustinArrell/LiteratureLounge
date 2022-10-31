@@ -21,7 +21,7 @@ namespace LiteratureLounge.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var Books = _db.Books.Where(b => b.Owner == userId).ToList();

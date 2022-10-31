@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Book>
+﻿@model BookIndexViewModel
 @{
     ViewData["Title"] = "Books";
 }
@@ -56,73 +56,48 @@
             </div>
         </div>
     </div>
-    
+  
+
+
     
 <div class="search-table-outter">
     <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%">
         <thead>
             <tr class="table-secondary header">
-                <th>
-                    Title
-                </th>
-                <th>
-                    Subtitle
-                </th>
-                <th>
-                    Author
-                </th>
-                <th>
-                    Series
-                </th>
-                <th>
-                    How's The Tea?
-                </th>
-                <th>
-                    ISBN
-                </th>
-                <th>
-                    Read Status
-                </th>
-                <th>
-                    Media Type
-                </th>
+                @foreach(var col in Model.UserPreferencesBookIndexColumns)
+                {
+                    <th>
+                        @col.IndexColumn.Name
+                    </th>
+                }
                 <th>
                     Modify
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var obj in Model)
+            @foreach (var obj in Model.Books)
             {
                 <tr>
-                    <td>
-                        @if (obj.isFavorite)
+                    
+                    @foreach(var col in Model.UserPreferencesBookIndexColumns)
+                    {
+                        @if (col.IndexColumn.Name == "Title") 
                         {
-                            <i class="bi bi-suit-heart-fill"></i>
+                            <td>
+                            @if (obj.isFavorite)
+                            {
+                                <i class="bi bi-suit-heart-fill"></i>
+                            }
+                            <a asp-action="DetailedView" asp-route-id="@obj.Id">@obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)</a>
+                                
+                            </td>
+                        }else{
+                            <td>
+                                @obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)
+                            </td>
                         }
-                        <a asp-action="DetailedView" asp-route-id="@obj.Id">@obj.Title</a>
-                    </td>
-                    <td>
-                        @obj.Subtitle
-                    </td>
-                    <td>
-                        @obj.Author
-                    </td>
-                    <td>
-                        @obj.Series
-                    </td>
-                    <td>
-                        @obj.Rating
-                    </td>
-                    <td>
-                        @obj.ISBN
-                    </td>
-                    <td>
-                        @obj.ReadStatus
-                    </td>
-                    <td>
-                        @obj.MediaType
-                    </td>
+                    }
                     <td style="display:flex; justify-content:center;">
                         <a asp-controller="Book" asp-action="Edit" asp-route-id="@obj.Id"
                         class="btn btn-primary" style="margin-bottom: 10px"><i class="bi bi-pen"></i></a>

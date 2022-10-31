@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Purrs_And_Prose.Data;
 
@@ -10,9 +11,10 @@ using Purrs_And_Prose.Data;
 namespace LiteratureLounge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221030172747_CreateUserModel")]
+    partial class CreateUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,39 +152,24 @@ namespace LiteratureLounge.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("UserPreferencesId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserPreferencesId");
 
                     b.ToTable("IndexColumns");
                 });
 
             modelBuilder.Entity("LiteratureLounge.Models.UserPreferences", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.ToTable("UserPreferences");
-                });
-
-            modelBuilder.Entity("LiteratureLounge.Models.UserPreferencesBookIndexColumn", b =>
-                {
-                    b.Property<int>("UserPreferencesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IndexColumnId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserPreferencesId", "IndexColumnId");
-
-                    b.HasIndex("IndexColumnId");
-
-                    b.ToTable("UserPreferenceIndexColumns");
                 });
 
             modelBuilder.Entity("LiteratureLounge.Models.BookGenre", b =>
@@ -204,23 +191,11 @@ namespace LiteratureLounge.Migrations
                     b.Navigation("Genre");
                 });
 
-            modelBuilder.Entity("LiteratureLounge.Models.UserPreferencesBookIndexColumn", b =>
+            modelBuilder.Entity("LiteratureLounge.Models.IndexColumn", b =>
                 {
-                    b.HasOne("LiteratureLounge.Models.IndexColumn", "IndexColumn")
-                        .WithMany("UserPreferencesBookIndexColumns")
-                        .HasForeignKey("IndexColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LiteratureLounge.Models.UserPreferences", "UserPreferences")
-                        .WithMany("UserPreferencesBookIndexColumns")
-                        .HasForeignKey("UserPreferencesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IndexColumn");
-
-                    b.Navigation("UserPreferences");
+                    b.HasOne("LiteratureLounge.Models.UserPreferences", null)
+                        .WithMany("IndexColumns")
+                        .HasForeignKey("UserPreferencesId");
                 });
 
             modelBuilder.Entity("LiteratureLounge.Models.Book", b =>
@@ -233,14 +208,9 @@ namespace LiteratureLounge.Migrations
                     b.Navigation("BookGenres");
                 });
 
-            modelBuilder.Entity("LiteratureLounge.Models.IndexColumn", b =>
-                {
-                    b.Navigation("UserPreferencesBookIndexColumns");
-                });
-
             modelBuilder.Entity("LiteratureLounge.Models.UserPreferences", b =>
                 {
-                    b.Navigation("UserPreferencesBookIndexColumns");
+                    b.Navigation("IndexColumns");
                 });
 #pragma warning restore 612, 618
         }
