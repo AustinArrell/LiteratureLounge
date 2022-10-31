@@ -33,11 +33,11 @@
 }
   </script>
 }
-    <div id="test" style="width: 50%; float:left">
-       <h1 class="text-primary">@ViewData["Title"]</h1>
+    <h1 class="text-primary">@ViewData["Title"]</h1>
+    <div style="display:flex">
+    <div id="test" style="width:50%">
         <div>
             <input class="form-control me-sm-2 mb-2"
-                style="width:80%;"
                 type="text"
                 id="SearchIndexInput"
                 onkeyup="FilterBookIndexSearch()"
@@ -45,7 +45,7 @@
                 title="Search by Title, Author, Series or ISBN">
         </div>
     </div>
-    <div class="bookAdd" style="width:50%; float:right; display:flex; justify-content:flex-end;">
+    <div class="bookAdd" style="width:50%;display:flex; justify-content:flex-end; margin-bottom:4px">
         <div class="btn-group" role="group">
             <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
             <div class="btn-group" role="group">
@@ -55,6 +55,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
   
 
