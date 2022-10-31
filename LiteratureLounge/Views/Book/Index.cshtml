@@ -2,67 +2,69 @@
 @{
     ViewData["Title"] = "Books";
 }
-
 @section Scripts {
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.4/jquery.floatThead.min.js" integrity="sha512-QhaSMfyPHtKHbg7e//C6Y/nmpflIM9PgmhZ/TR+BcbRaR9eYXzZRfuK5D9pnVlp+J5zWXu5ckVzX4ycOQy/jZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="text/javascript" src="~/js/tablesorter.js"></script>
   <script>
         $(function() {
             $("#bookTable").tablesorter();
         });
+        var $table = $('#bookTable');
+        $table.floatThead({
+            scrollContainer: function($table) {
+                return $table.closest('.search-table-outter');
+            }
+        })
 
-        const FilterBookIndexSearch = () => {
-        const columns = [
-        { name: 'Title', index: 0, isFilter: true },
-        { name: 'Author', index: 2, isFilter: true },
-        { name: 'Series', index: 3, isFilter: true },
-        { name: 'ISBN', index: 5, isFilter: true }
-        ]
-        const filterColumns = columns.filter(c => c.isFilter).map(c => c.index)
-        const trs = document.querySelectorAll(`#bookTable tr:not(.header)`)
-        const filter = document.querySelector('#SearchIndexInput').value
-        const regex = new RegExp(filter, 'i')
-        const isFoundInTds = td => regex.test(td.innerHTML)
-        const isFound = childrenArr => childrenArr.some(isFoundInTds)
-        const setTrStyleDisplay = ({ style, children }) => {
-        style.display = isFound([
-            ...filterColumns.map(c => children[c])
-        ]) ? '' : 'none'
-        }
-  
-    trs.forEach(setTrStyleDisplay)
-}
   </script>
 }
-    <h1 class="text-primary">@ViewData["Title"]</h1>
-    <div style="display:flex">
-    <div id="test" style="width:50%">
-        <div>
-            <input class="form-control me-sm-2 mb-2"
-                type="text"
-                id="SearchIndexInput"
-                onkeyup="FilterBookIndexSearch()"
-                placeholder="Search by Title, Author, Series or ISBN"
-                title="Search by Title, Author, Series or ISBN">
-        </div>
-    </div>
-    <div class="bookAdd" style="width:50%;display:flex; justify-content:flex-end; margin-bottom:4px">
-        <div class="btn-group" role="group">
-            <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
-            <div class="btn-group" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                    <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Column Display</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" >
+      <div class="modal-body">
+            @foreach(var col in Model.Columns)
+            {
+                <div>
+                    @Html.CheckBoxFor(m => m.UserPrefColumns[col.Name],new {@class="form-check-input"})
+                    @col.Name
                 </div>
+            }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" asp-action="EditIndexColumnPrefs">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<h1 class="text-primary">@ViewData["Title"]</h1>
+<div style="display:flex; justify-content:flex-end">
+<div class="bookAdd" style="width:50%;display:flex; justify-content:flex-end; margin-bottom:4px">
+    <a id="columnFilterButton" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="margin-right:4px"><i class="bi bi-list-columns"></i></a>
+    <div class="btn-group" role="group">
+        <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
             </div>
         </div>
     </div>
-    </div>
-  
-
-
-    
-<div class="search-table-outter">
-    <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%">
+</div>
+</div>
+   
+<div class="search-table-outter" style="height:75vh">
+    <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%;">
         <thead>
             <tr class="table-secondary header">
                 @foreach(var col in Model.UserPreferencesBookIndexColumns)
@@ -85,7 +87,7 @@
                     {
                         @if (col.IndexColumn.Name == "Title") 
                         {
-                            <td>
+                            <td style="min-width:20em">
                             @if (obj.isFavorite)
                             {
                                 <i class="bi bi-suit-heart-fill"></i>
@@ -93,13 +95,21 @@
                             <a asp-action="DetailedView" asp-route-id="@obj.Id">@obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)</a>
                                 
                             </td>
-                        }else{
-                            <td>
+                        }else @if (col.IndexColumn.Name == "Description" || col.IndexColumn.Name == "Notes") {
+                            <td style="min-width:40em;">
+                                <div style="display: -webkit-box;max-height:4.5em;-webkit-line-clamp: 3;overflow: hidden;-webkit-box-orient: vertical;">
+                                    @obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)
+                                </div>
+                                
+                            </td>
+                        }else
+                        {
+                            <td style="min-width:10em" >
                                 @obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)
                             </td>
                         }
                     }
-                    <td style="display:flex; justify-content:center;">
+                    <td style="min-width:8em">
                         <a asp-controller="Book" asp-action="Edit" asp-route-id="@obj.Id"
                         class="btn btn-primary" style="margin-bottom: 10px"><i class="bi bi-pen"></i></a>
                         <a asp-controller="Book" asp-action="Delete" asp-route-id="@obj.Id"

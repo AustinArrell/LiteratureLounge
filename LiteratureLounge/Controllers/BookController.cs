@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LiteratureLounge.Controller_Extensions;
 using LiteratureLounge.Models;
 using LiteratureLounge.Tools;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Purrs_And_Prose.Data;
 using System.Diagnostics;
-using System.Net;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using LanguageExt.TypeClasses;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using LiteratureLounge.Controller_Extensions;
 
 namespace LiteratureLounge.Controllers
 {
@@ -48,7 +46,53 @@ namespace LiteratureLounge.Controllers
             }
                 
             IEnumerable<Book> books = _db.Books.Where(b => b.Owner == userId).ToList().OrderBy(b => b.Title);
-            return View(new BookIndexViewModel { Books = books, UserPreferencesBookIndexColumns = userPrefs.UserPreferencesBookIndexColumns});
+            var allColumns = _db.IndexColumns.OrderBy(ic => ic.Name).ToList();
+            Dictionary<string,bool> colNames = new Dictionary<string, bool>();
+            foreach (var col in allColumns) {
+                colNames[col.Name] = false;
+                foreach (var prefCol in userPrefs.UserPreferencesBookIndexColumns)
+                {
+                    if (col.Name == prefCol.IndexColumn.Name)
+                    {
+                        colNames[col.Name] = true;
+                        continue;
+                    }
+                }
+            }
+            return View(new BookIndexViewModel { 
+                Books = books, 
+                UserPreferencesBookIndexColumns = userPrefs.UserPreferencesBookIndexColumns, 
+                Columns = allColumns,
+                UserPrefColumns = colNames});
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditIndexColumnPrefs(BookIndexViewModel model) 
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userPrefs = _db.UserPreferences
+                .Where(up => up.UserId == userId)
+                .Include(up => up.UserPreferencesBookIndexColumns)
+                .ThenInclude(upic => upic.IndexColumn)
+                .FirstOrDefault();
+            List<UserPreferencesBookIndexColumn> userPrefIndexCols = new List<UserPreferencesBookIndexColumn>();
+            var columns = _db.IndexColumns.ToList();
+
+            foreach (var item in model.UserPrefColumns)
+            {
+                if (item.Value == true)
+                {
+                    userPrefIndexCols.Add(new UserPreferencesBookIndexColumn
+                    {
+                        IndexColumn = _db.IndexColumns.Where(c => c.Name == item.Key).FirstOrDefault()
+                    });
+                }
+            }
+            userPrefs.UserPreferencesBookIndexColumns = userPrefIndexCols;
+            _db.Update(userPrefs);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         [Authorize]

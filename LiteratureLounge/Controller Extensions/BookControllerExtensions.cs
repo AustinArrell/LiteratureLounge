@@ -50,8 +50,8 @@ namespace LiteratureLounge.Controller_Extensions
             newCols.Add(new IndexColumn { Name = "ReadDate" });
             newCols.Add(new IndexColumn { Name = "CatalogDate" });
             newCols.Add(new IndexColumn { Name = "ChapterLength" });
-            newCols.Add(new IndexColumn { Name = "IsStamped" });
-            newCols.Add(new IndexColumn { Name = "IsAnnotated" });
+            newCols.Add(new IndexColumn { Name = "isStamped" });
+            newCols.Add(new IndexColumn { Name = "isAnnotated" });
             newCols.Add(new IndexColumn { Name = "isSigned" });
             newCols.Add(new IndexColumn { Name = "isFavorite" });
             newCols.Add(new IndexColumn { Name = "ReadStatus" });
