@@ -1,3 +1,5 @@
+
+
 html {
   font-size: 14px;
 }
@@ -53,9 +55,8 @@ body {
     display: inline;
 }
 
-.search-table-outter {
-    width:100%;
-    overflow-x: scroll;
+.dataTables_wrapper .dataTables_filter {
+    display:none;
 }
 
 

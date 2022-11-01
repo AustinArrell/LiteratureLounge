@@ -4,18 +4,45 @@
 }
 @section Scripts {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.4/jquery.floatThead.min.js" integrity="sha512-QhaSMfyPHtKHbg7e//C6Y/nmpflIM9PgmhZ/TR+BcbRaR9eYXzZRfuK5D9pnVlp+J5zWXu5ckVzX4ycOQy/jZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="~/js/tablesorter.js"></script>
   <script>
         $(function() {
             $("#bookTable").tablesorter();
         });
-        var $table = $('#bookTable');
-        $table.floatThead({
-            scrollContainer: function($table) {
-                return $table.closest('.search-table-outter');
-            }
-        })
 
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+             $('#bookTable tfoot th').each(function () {
+                var title = $(this).text();
+                 if (title != 'Modify') { 
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                 }
+            });
+ 
+        // DataTable
+        var table = $('#bookTable').DataTable({
+            autoWidth: false,
+            scrollY: '70vh',
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            initComplete: function () {
+                // Apply the search
+                this.api()
+                    .columns()
+                    .every(function () {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+            },
+        });
+    });
   </script>
 }
 
@@ -48,8 +75,8 @@
 </div>
 
 <h1 class="text-primary">@ViewData["Title"]</h1>
-<div style="display:flex; justify-content:flex-end">
-<div class="bookAdd" style="width:50%;display:flex; justify-content:flex-end; margin-bottom:4px">
+<div style="display:flex;">
+<div class="bookAdd" style="display:flex; justify-content:flex-end; margin-bottom:4px">
     <a id="columnFilterButton" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="margin-right:4px"><i class="bi bi-list-columns"></i></a>
     <div class="btn-group" role="group">
         <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
@@ -63,8 +90,8 @@
 </div>
 </div>
    
-<div class="search-table-outter" style="height:75vh">
-    <table id="bookTable" class="table table-bordered table-striped tablesorter" style="width:100%;">
+<div class="search-table-outter" style="width:100%">
+    <table id="bookTable" class="table table-bordered table-striped tablesorter" >
         <thead>
             <tr class="table-secondary header">
                 @foreach(var col in Model.UserPreferencesBookIndexColumns)
@@ -118,5 +145,14 @@
                 </tr> 
             }
         </tbody>
+        <tfoot style="display:table-header-group">
+            <tr>
+                @foreach(var col in Model.UserPreferencesBookIndexColumns)
+                {
+                    <th>@col.IndexColumn.Name</th>
+                }
+                <th>Modify</th>
+            </tr>
+        </tfoot>
     </table>
 </div>
