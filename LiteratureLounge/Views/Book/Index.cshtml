@@ -5,8 +5,18 @@
 @section Scripts {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.4/jquery.floatThead.min.js" integrity="sha512-QhaSMfyPHtKHbg7e//C6Y/nmpflIM9PgmhZ/TR+BcbRaR9eYXzZRfuK5D9pnVlp+J5zWXu5ckVzX4ycOQy/jZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript">
-        
+  <script src="/js/splide.js"></script>
+  <script>
+    new Splide( '.splide',{
+        perPage: 5,
+        perMove: 1,
+        autoplay: true,
+        interval: 2000,
+        pauseOnHover: true,
+        type: 'loop',
+        snap: false
+
+    } ).mount();
   </script>
   <script>
     $(document).ready(function () {
@@ -15,7 +25,7 @@
         var table = $('#bookTable').DataTable({
 
             autoWidth: false,
-            scrollY: '60vh',
+            scrollY: '30vh',
             scrollX: true,
             scrollCollapse: true,
             paging: false,
@@ -130,4 +140,16 @@
             }
         </tbody>
     </table>
+</div>
+<div>
+<section class="splide" aria-label="Splide Basic HTML Example" style="width:100%;">
+      <div class="splide__track"  >
+            <ul class="splide__list">
+                @foreach(var obj in Model.Books)
+                {
+                       <li class="splide__slide"><a asp-action="DetailedView" asp-route-id="@obj.Id"><img style="width:10vw; max-height:80%" src=@obj.CoverLink></img></a></li>
+                }
+            </ul>
+      </div>
+    </section>
 </div>
