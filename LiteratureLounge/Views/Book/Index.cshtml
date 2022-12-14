@@ -5,43 +5,25 @@
 @section Scripts {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.4/jquery.floatThead.min.js" integrity="sha512-QhaSMfyPHtKHbg7e//C6Y/nmpflIM9PgmhZ/TR+BcbRaR9eYXzZRfuK5D9pnVlp+J5zWXu5ckVzX4ycOQy/jZA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" src="~/js/tablesorter.js"></script>
+  <script type="text/javascript">
+        
+  </script>
   <script>
-        $(function() {
-            $("#bookTable").tablesorter();
-        });
-
-        $(document).ready(function () {
-            // Setup - add a text input to each footer cell
-             $('#bookTable tfoot th').each(function () {
-                var title = $(this).text();
-                 if (title != 'Modify') { 
-                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-                 }
-            });
- 
+    $(document).ready(function () {
+        var searchBar = $('#searchBar');
         // DataTable
         var table = $('#bookTable').DataTable({
+
             autoWidth: false,
-            scrollY: '70vh',
+            scrollY: '60vh',
             scrollX: true,
             scrollCollapse: true,
             paging: false,
-            initComplete: function () {
-                // Apply the search
-                this.api()
-                    .columns()
-                    .every(function () {
-                        var that = this;
-
-                        $('input', this.footer()).on('keyup change clear', function () {
-                            if (that.search() !== this.value) {
-                                that.search(this.value).draw();
-                            }
-                        });
-                    });
-            },
+            searching: true,
         });
+            $(searchBar.on('keyup change clear', function () {
+                    table.search(this.value).draw();
+            }));
     });
   </script>
 }
@@ -75,23 +57,26 @@
 </div>
 
 <h1 class="text-primary">@ViewData["Title"]</h1>
-<div style="display:flex;">
-<div class="bookAdd" style="display:flex; justify-content:flex-end; margin-bottom:4px">
-    <a id="columnFilterButton" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="margin-right:4px"><i class="bi bi-list-columns"></i></a>
+
+<div>
+<div class="bookAdd" style="display:inline;">
+    <input id="searchBar" class="form-control" type="search" style="display:inline;width:300px;" placeholder="Search..."/>
+    <a id="columnFilterButton" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-bottom:4px"><i class="bi bi-list-columns"></i></a>
     <div class="btn-group" role="group">
-        <a asp-action="CreateFromISBN" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
-        <div class="btn-group" role="group">
+        <a asp-action="CreateFromISBN" style="margin-bottom:4px" type="button" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create Book</a>
+        <div class="btn-group" style="margin-bottom:4px" role="group">
             <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
                 <a asp-action="Create" class="dropdown-item">Manual Book Creation</a>
             </div>
         </div>
+    
     </div>
 </div>
 </div>
    
-<div class="search-table-outter" style="width:100%">
-    <table id="bookTable" class="table table-bordered table-striped tablesorter" >
+<div class="search-table-outter" style="width:100%;">
+    <table id="bookTable" class="table table-bordered table-striped" >
         <thead>
             <tr class="table-secondary header">
                 @foreach(var col in Model.UserPreferencesBookIndexColumns)
@@ -127,7 +112,6 @@
                                 <div style="display: -webkit-box;max-height:4.5em;-webkit-line-clamp: 3;overflow: hidden;-webkit-box-orient: vertical;">
                                     @obj.GetType().GetProperty(col.IndexColumn.Name).GetValue(obj,null)
                                 </div>
-                                
                             </td>
                         }else
                         {
@@ -145,14 +129,5 @@
                 </tr> 
             }
         </tbody>
-        <tfoot style="display:table-header-group">
-            <tr>
-                @foreach(var col in Model.UserPreferencesBookIndexColumns)
-                {
-                    <th>@col.IndexColumn.Name</th>
-                }
-                <th>Modify</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
