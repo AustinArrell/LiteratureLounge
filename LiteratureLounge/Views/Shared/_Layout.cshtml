@@ -43,6 +43,9 @@
                             <a class="nav-link text-dark" asp-controller="Genre" asp-action="Create" >Create Genre</a>
                           </div>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Calendar">Calendar</a>
+                        </li>
                     </ul>
                  @if (!(User.Identity.IsAuthenticated))
                     {

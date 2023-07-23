@@ -6,6 +6,8 @@ using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace LiteratureLounge.Controllers
 {
@@ -27,6 +29,29 @@ namespace LiteratureLounge.Controllers
             var Books = _db.Books.Where(b => b.Owner == userId).ToList();
             return View(new HomeIndexViewModel {Books = Books });
         }
+
+        [Authorize]
+        public IActionResult Calendar()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var Books = _db.Books.Where(b => b.Owner == userId).ToList();
+            List<Dictionary<String, String>> readDates = new List<Dictionary<String, String>>(); 
+            foreach (var book in Books)
+            {
+                Dictionary<String, String> item = new Dictionary<string, string>();
+                if (book.ReadDate is not null)
+                {
+                    item.Add("title", book.Title);
+                    item.Add("start", book.ReadDate);
+                    string url = HttpContext.Request.GetDisplayUrl();
+                    url = url.Replace("/Home/Calendar", $"/Book/DetailedView?id={book.Id}");
+                    item.Add("url", url);
+                    readDates.Add(item);
+                }
+            }
+            return View(new HomeIndexViewModel { Books = Books, ReadDates = readDates });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

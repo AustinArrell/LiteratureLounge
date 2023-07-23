@@ -4,7 +4,10 @@
 }
 @section Scripts
 {
+    
     <script type="text/javascript" src="~/js/plotly.js"></script>
+
+
 
     <script>
         const colors = ['#369', '#eb6864', '#22b24c', '#aaa', '#f5e625'];
@@ -49,6 +52,7 @@
         <h4>@Model.Books.Count() books catalogued!</h4>
         <h6 id="bookPageCount">@Model.Books.Select(b => b.PageCount).Sum() total pages </h6>
 </div>
+
     <div style="Display:flex; justify-content:center;">
         <div id="readDataChart" style="height:100%;"></div>
         <div id="readPagesChart" style="height:100%;"></div>
@@ -58,3 +62,4 @@
     <p style='Display:none;'id="bookUnreadCount">@Model.Books.Where(b => b.ReadStatus != "Read").Count()</p>
     <p style='Display:none;'id="bookReadPageCount">@Model.Books.Where(b => b.ReadStatus is not null && b.ReadStatus != "Unread" ).Select(b => b.PageCount).Sum() </p>
     <p style='Display:none;'id="bookUnreadPageCount">@Model.Books.Where(b => b.ReadStatus != "Read").Select(b => b.PageCount).Sum() </p>
+    <div id='calendar'></div>
