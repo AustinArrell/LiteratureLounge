@@ -15,18 +15,22 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
               initialView: 'dayGridMonth',
               height:'100%',
-              events:books
+              events:books,
+                  eventColor: '#eb6864'
             });
             calendar.render();
           });
+
+      var date = calendar.getDate();
+      var month_int = date.getMonth();
+      console.log(month_int);
     </script>
 }
 <div class="text-center">
     <h1 class="display-4">Bugs Books</h1>
-        <h4>@Model.Books.Count() books catalogued!</h4>
-        <h6 id="bookPageCount">@Model.Books.Select(b => b.PageCount).Sum() total pages </h6>
+        
 </div>
-
+    
     <div style="Display:flex; justify-content:center;">
         <div id="readDataChart" style="height:100%;"></div>
         <div id="readPagesChart" style="height:100%;"></div>
