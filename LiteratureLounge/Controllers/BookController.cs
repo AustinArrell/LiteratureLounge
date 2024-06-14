@@ -25,7 +25,7 @@ namespace LiteratureLounge.Controllers
             hostingEnvironment = enviornment;
         }
 
-        [Authorize]
+
         public async Task<IActionResult> Index()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -66,7 +66,6 @@ namespace LiteratureLounge.Controllers
                 UserPrefColumns = colNames});
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditIndexColumnPrefs(BookIndexViewModel model) 
         {
@@ -94,8 +93,6 @@ namespace LiteratureLounge.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-        [Authorize]
         public IActionResult Create()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -105,7 +102,6 @@ namespace LiteratureLounge.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookEditViewModel model)
         {
@@ -149,7 +145,6 @@ namespace LiteratureLounge.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult CreateFromISBN()
         {
             return View();
@@ -157,7 +152,6 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> CreateFromISBN(ISBNBookCreateViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -206,7 +200,6 @@ namespace LiteratureLounge.Controllers
         }
 
         // UPDATE
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -250,7 +243,6 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Edit(BookEditViewModel model)
         {
             if (ModelState.IsValid)
@@ -296,7 +288,6 @@ namespace LiteratureLounge.Controllers
                 return RedirectToAction("Edit", new { model.book.Id });
             }
         }
-        [Authorize]
         public async Task<IActionResult> Rating(int? rating, int? id)
         {
             // Block attempts to edit books not owned by current user
@@ -312,8 +303,6 @@ namespace LiteratureLounge.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("DetailedView", new { book.Id });
         }
-
-        [Authorize]
         public IActionResult DetailedView(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -334,7 +323,6 @@ namespace LiteratureLounge.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         public IActionResult EditCoverImage(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -349,7 +337,6 @@ namespace LiteratureLounge.Controllers
             return View(viewModel);
         }
 
-        [Authorize]
         public IActionResult Delete(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -364,7 +351,6 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Delete(Book book)
         {
             if (ModelState.IsValid)
@@ -388,7 +374,6 @@ namespace LiteratureLounge.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Upload(BookDetailedViewModel model, string isbn, int id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

@@ -22,7 +22,6 @@ namespace LiteratureLounge.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -30,7 +29,6 @@ namespace LiteratureLounge.Controllers
             return View(new HomeIndexViewModel {Books = Books });
         }
 
-        [Authorize]
         public IActionResult Calendar()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;

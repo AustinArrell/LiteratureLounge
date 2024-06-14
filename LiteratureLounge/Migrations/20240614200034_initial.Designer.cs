@@ -11,8 +11,8 @@ using Purrs_And_Prose.Data;
 namespace LiteratureLounge.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221006205235_addPublisherAndDescription")]
-    partial class addPublisherAndDescription
+    [Migration("20240614200034_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,9 @@ namespace LiteratureLounge.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("CatalogDate")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ChapterLength")
                         .HasColumnType("longtext");
 
@@ -44,7 +47,6 @@ namespace LiteratureLounge.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ISBN")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("MediaType")
@@ -52,6 +54,12 @@ namespace LiteratureLounge.Migrations
 
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Owner")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("PageCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("PublishedDate")
                         .HasColumnType("longtext");
@@ -62,7 +70,13 @@ namespace LiteratureLounge.Migrations
                     b.Property<float?>("Rating")
                         .HasColumnType("float");
 
+                    b.Property<string>("ReadDate")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ReadStatus")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Series")
                         .HasColumnType("longtext");
 
                     b.Property<string>("SignatureType")
@@ -120,9 +134,57 @@ namespace LiteratureLounge.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Owner")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+                });
+
+            modelBuilder.Entity("LiteratureLounge.Models.IndexColumn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IndexColumns");
+                });
+
+            modelBuilder.Entity("LiteratureLounge.Models.UserPreferences", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserPreferences");
+                });
+
+            modelBuilder.Entity("LiteratureLounge.Models.UserPreferencesBookIndexColumn", b =>
+                {
+                    b.Property<int>("UserPreferencesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IndexColumnId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserPreferencesId", "IndexColumnId");
+
+                    b.HasIndex("IndexColumnId");
+
+                    b.ToTable("UserPreferenceIndexColumns");
                 });
 
             modelBuilder.Entity("LiteratureLounge.Models.BookGenre", b =>
@@ -144,6 +206,25 @@ namespace LiteratureLounge.Migrations
                     b.Navigation("Genre");
                 });
 
+            modelBuilder.Entity("LiteratureLounge.Models.UserPreferencesBookIndexColumn", b =>
+                {
+                    b.HasOne("LiteratureLounge.Models.IndexColumn", "IndexColumn")
+                        .WithMany("UserPreferencesBookIndexColumns")
+                        .HasForeignKey("IndexColumnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LiteratureLounge.Models.UserPreferences", "UserPreferences")
+                        .WithMany("UserPreferencesBookIndexColumns")
+                        .HasForeignKey("UserPreferencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IndexColumn");
+
+                    b.Navigation("UserPreferences");
+                });
+
             modelBuilder.Entity("LiteratureLounge.Models.Book", b =>
                 {
                     b.Navigation("BookGenres");
@@ -152,6 +233,16 @@ namespace LiteratureLounge.Migrations
             modelBuilder.Entity("LiteratureLounge.Models.Genre", b =>
                 {
                     b.Navigation("BookGenres");
+                });
+
+            modelBuilder.Entity("LiteratureLounge.Models.IndexColumn", b =>
+                {
+                    b.Navigation("UserPreferencesBookIndexColumns");
+                });
+
+            modelBuilder.Entity("LiteratureLounge.Models.UserPreferences", b =>
+                {
+                    b.Navigation("UserPreferencesBookIndexColumns");
                 });
 #pragma warning restore 612, 618
         }

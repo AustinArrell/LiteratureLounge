@@ -19,7 +19,6 @@ namespace LiteratureLounge.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -27,7 +26,6 @@ namespace LiteratureLounge.Controllers
             return View(genres);
         }
 
-        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -35,7 +33,7 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+
         public async Task<IActionResult> Create(Genre genre)
         { 
             if (ModelState.IsValid) 
@@ -61,7 +59,6 @@ namespace LiteratureLounge.Controllers
             return View();
         }
 
-        [Authorize]
         public IActionResult Delete(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -76,7 +73,6 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Delete(Genre genre)
         {
             if (ModelState.IsValid)
@@ -90,7 +86,6 @@ namespace LiteratureLounge.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -105,7 +100,6 @@ namespace LiteratureLounge.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Edit(Genre genre)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
