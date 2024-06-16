@@ -2,7 +2,6 @@
 using LiteratureLounge.Models;
 using System.Diagnostics;
 using Purrs_And_Prose.Data;
-using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
