@@ -22,18 +22,16 @@ namespace LiteratureLounge.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var Books = _db.Books.Where(b => b.Owner == userId).ToList();
             return View(new HomeIndexViewModel {Books = Books });
         }
 
-        [Authorize]
         public IActionResult Calendar()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var Books = _db.Books.Where(b => b.Owner == userId).ToList();
             List<Dictionary<String, String>> readDates = new List<Dictionary<String, String>>(); 
             foreach (var book in Books)

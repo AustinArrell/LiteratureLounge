@@ -1,8 +1,11 @@
 
 
 using Auth0.AspNetCore.Authentication;
+using LiteratureLounge.Models;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Purrs_And_Prose.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +16,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
     connectionString, ServerVersion.AutoDetect(connectionString)
     ));
-builder.Services.AddAuth0WebAppAuthentication(options => {
-    options.Domain = builder.Configuration["Auth0:Domain"];
-    options.ClientId = builder.Configuration["Auth0:ClientId"];
-    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,8 +33,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

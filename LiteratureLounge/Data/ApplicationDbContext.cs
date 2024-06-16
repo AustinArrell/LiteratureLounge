@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LiteratureLounge.Models;
+﻿using LiteratureLounge.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Purrs_And_Prose.Data
 {
@@ -34,7 +36,6 @@ namespace Purrs_And_Prose.Data
                 .WithMany(up => up.UserPreferencesBookIndexColumns)
                 .HasForeignKey(bc => bc.IndexColumnId);
         }
-
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
