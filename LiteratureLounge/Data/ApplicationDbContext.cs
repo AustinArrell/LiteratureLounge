@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Purrs_And_Prose.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -36,7 +36,6 @@ namespace Purrs_And_Prose.Data
                 .WithMany(up => up.UserPreferencesBookIndexColumns)
                 .HasForeignKey(bc => bc.IndexColumnId);
         }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }

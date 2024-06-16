@@ -28,7 +28,8 @@ namespace LiteratureLounge.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
+           
             var userPrefs = _db.UserPreferences
                 .Where(up => up.UserId == userId)
                 .Include(up => up.UserPreferencesBookIndexColumns)
@@ -69,7 +70,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         public async Task<IActionResult> EditIndexColumnPrefs(BookIndexViewModel model) 
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var userPrefs = _db.UserPreferences
                 .Where(up => up.UserId == userId)
                 .Include(up => up.UserPreferencesBookIndexColumns)
@@ -95,7 +96,7 @@ namespace LiteratureLounge.Controllers
         }
         public IActionResult Create()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             MultiSelectList _genreList = new MultiSelectList(genres, nameof(Genre.Id), nameof(Genre.Name));
             return View(new BookEditViewModel {GenreSelectItems=_genreList});
@@ -105,7 +106,7 @@ namespace LiteratureLounge.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookEditViewModel model)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
 
             model.book.Owner = userId;
             model.book.CatalogDate = DateTime.Today.ToString();
@@ -158,7 +159,7 @@ namespace LiteratureLounge.Controllers
             {
                 viewModel.ISBN = CleanISBN(viewModel.ISBN);
                 var result = await booklookup.LookupBookDetails(viewModel.ISBN);
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = "DEVUSER";
 
                 return result.Match(book =>
                 {
@@ -202,7 +203,7 @@ namespace LiteratureLounge.Controllers
         // UPDATE
         public IActionResult Edit(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var _book = _db.Books
                 .Where(b => b.Owner == userId)
                 .Include(book => book.BookGenres)
@@ -291,7 +292,7 @@ namespace LiteratureLounge.Controllers
         public async Task<IActionResult> Rating(int? rating, int? id)
         {
             // Block attempts to edit books not owned by current user
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
@@ -305,7 +306,7 @@ namespace LiteratureLounge.Controllers
         }
         public IActionResult DetailedView(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var book = _db.Books
                 .Where(b => b.Owner == userId)
                 .Include(book => book.BookGenres)
@@ -325,7 +326,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult EditCoverImage(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
@@ -339,7 +340,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult Delete(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var book = _db.Books.Where(b => b.Owner == userId).FirstOrDefault(c => c.Id == id);
             if (book == null)
             {
@@ -355,7 +356,7 @@ namespace LiteratureLounge.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = "DEVUSER";
                 if (book.Owner != userId) 
                 {
                     TempData["Error"] = $"Failed to delete book!";
@@ -376,7 +377,7 @@ namespace LiteratureLounge.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(BookDetailedViewModel model, string isbn, int id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var dbBook = _db.Books.Where(b => b.Id == id && b.Owner == userId).FirstOrDefault();
             if (model.file is not null && dbBook is not null && ModelState.IsValid)
             {

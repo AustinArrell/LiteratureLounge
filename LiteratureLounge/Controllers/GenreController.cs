@@ -21,7 +21,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult Index()
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             IEnumerable<Genre> genres = _db.Genres.Where(g => g.Owner == userId).ToList();
             return View(genres);
         }
@@ -38,7 +38,7 @@ namespace LiteratureLounge.Controllers
         { 
             if (ModelState.IsValid) 
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = "DEVUSER";
                 genre.Owner = userId;
                 var _genres = _db.Genres.Where(g => g.Owner == userId).ToList();
                 foreach (var _genre in _genres)
@@ -61,7 +61,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult Delete(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var genre = _db.Genres.Where(g => g.Id == id && g.Owner == userId).FirstOrDefault();
             if (genre is not null)
             {
@@ -88,7 +88,7 @@ namespace LiteratureLounge.Controllers
 
         public IActionResult Edit(int? id)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             var genre = _db.Genres.Where(g => g.Id == id && g.Owner == userId).FirstOrDefault();
             if (genre is not null)
             {
@@ -102,7 +102,7 @@ namespace LiteratureLounge.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Genre genre)
         {
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = "DEVUSER";
             if (ModelState.IsValid) 
             {
                 var _genres = _db.Genres.Where(g => g.Owner == userId).ToList();
